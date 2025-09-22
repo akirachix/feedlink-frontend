@@ -32,17 +32,17 @@ export default function Sidebar() {
         color: 'white',
       }}
     >
-      <div className="absolute top-16 left-8 flex flex-col items-start gap-2 select-none">
+      <div className="absolute top-16 left-8 flex flex-col items-start gap-2 select-none ml-3">
         <img
           src="/images/logo.svg"
           alt="FeedLink Logo"
-          width={350}
+          width={400}
           height={70}
           className="object-contain"
         />
       </div>
 
-      <nav className="flex flex-col gap-3 px-6 pt-40 pb-6 flex-grow">
+      <nav className="flex flex-col gap-3 px-6 pt-40 pb-6 flex-grow ml-7 mt-2">
         {sidebarMenu.map(({ id, label, href, icon: Icon }) => {
           const isActive = pathname === href;
           return (
@@ -65,7 +65,7 @@ export default function Sidebar() {
 
         <Link
           href="/logout"
-          className="flex items-center gap-3 rounded-md px-4 py-2 text-white hover:bg-white hover:text-[var(--secondary-color)] transition-colors duration-200 mb-20"
+          className="flex items-center gap-3 rounded-md px-4 py-2 text-white hover:bg-white hover:text-[var(--secondary-color)] transition-colors duration-200 mb-20 ml-2"
         >
           <FiLogOut size={20} />
           <span className="text-lg">Log Out</span>

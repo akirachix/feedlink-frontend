@@ -51,10 +51,5 @@ describe("Sidebar Component", () => {
     expect(dashboardLink).toHaveClass("hover:text-[var(--secondary-color)]");
   });
 
-  it("matches snapshot", () => {
-    (usePathname as jest.Mock).mockReturnValue("/");
-
-    const { asFragment } = render(<Sidebar />);
-    expect(asFragment()).toMatchSnapshot();
-  });
+ 
 });

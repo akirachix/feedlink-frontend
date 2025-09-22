@@ -51,8 +51,8 @@ export default function Sidebar() {
               href={href}
               className={`flex items-center gap-3 rounded-md px-4 py-2 cursor-pointer transition-colors duration-200
                 ${isActive
-                  ? "bg-white text-orange-500 font-semibold"
-                  : "text-white hover:bg-white hover:text-orange-500"
+                  ? "bg-white text-[var(--secondary-color)] font-semibold"
+                  : "text-white hover:bg-white hover:text-[var(--secondary-color)]"
                 }`}
             >
               <Icon size={20} />
@@ -65,7 +65,7 @@ export default function Sidebar() {
 
         <Link
           href="/logout"
-          className="flex items-center gap-3 rounded-md px-4 py-2 text-white hover:bg-white hover:text-orange-500 transition-colors duration-200 mb-20"
+          className="flex items-center gap-3 rounded-md px-4 py-2 text-white hover:bg-white hover:text-[var(--secondary-color)] transition-colors duration-200 mb-20"
         >
           <FiLogOut size={20} />
           <span className="text-lg">Log Out</span>

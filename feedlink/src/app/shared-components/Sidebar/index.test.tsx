@@ -35,7 +35,7 @@ describe("Sidebar Component", () => {
     const dashboardLink = screen.getByText("Dashboard").closest("a");
 
     expect(dashboardLink).toHaveClass("bg-white");
-    expect(dashboardLink).toHaveClass("text-orange-500");
+    expect(dashboardLink).toHaveClass("text-[var(--secondary-color)]");
     expect(dashboardLink).toHaveClass("font-semibold");
   });
 
@@ -46,9 +46,9 @@ describe("Sidebar Component", () => {
     const dashboardLink = screen.getByText("Dashboard").closest("a");
 
     expect(dashboardLink).not.toHaveClass("bg-white");
-    expect(dashboardLink).not.toHaveClass("text-orange-500");
+    expect(dashboardLink).not.toHaveClass("text-[var(--secondary-color)]");
     expect(dashboardLink).toHaveClass("hover:bg-white");
-    expect(dashboardLink).toHaveClass("hover:text-orange-500");
+    expect(dashboardLink).toHaveClass("hover:text-[var(--secondary-color)]");
   });
 
   it("matches snapshot", () => {

@@ -14,7 +14,7 @@ import {
 const sidebarMenu = [
   { id: "1", label: "Dashboard", href: "/dashboard", icon: FiGrid },
   { id: "2", label: "Inventory", href: "/inventory", icon: FiBox },
-  { id: "3", label: "Waste Claims", href: "/wasteclaims", icon: FiTrash2 },
+  { id: "3", label: "Waste Claims", href: "/waste-claims", icon: FiTrash2 },
   { id: "4", label: "Orders", href: "/orders", icon: FiShoppingCart },
 ];
 

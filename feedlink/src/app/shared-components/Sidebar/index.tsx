@@ -19,7 +19,7 @@ const sidebarMenu = [
 ];
 
 export default function Sidebar() {
-  const pathname = usePathname() || "/";
+  const pathname = usePathname();
 
   return (
     <aside

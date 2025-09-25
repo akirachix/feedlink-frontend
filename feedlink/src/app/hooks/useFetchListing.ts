@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
 import { fetchListings } from "../utils/fetchListing";
-
-export interface ListingType {
-  listing_id: number;
-  category: string;
-
-}
+import { ListingType } from "../utils/type";
 
 const useFetchListings = () => {
-  const [listings, setListings] = useState<Record<number, string>>({});
+  const [listings, setListings] = useState<Record<number, ListingType>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const data: ListingType[] = await fetchListings(); 
-
-        const listingMap: Record<number, string> = {};
-        data.forEach((listing) => {
-          listingMap[listing.listing_id] = listing.category || "Unknown";
+        const  listing: ListingType[] = await fetchListings();
+        const listingMap: Record<number, ListingType> = {}; 
+        listing.forEach((listing) => {
+          listingMap[listing.listing_id] = listing;
         });
 
         setListings(listingMap);
-      } catch (err) {
-        setError((err as Error).message);
+      } catch (error) {
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }

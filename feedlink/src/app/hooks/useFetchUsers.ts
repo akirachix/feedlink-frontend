@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchUsers } from "../utils/fetchUsers";
-
-export interface UserType {
-  id: number;
-  first_name: string;
-  last_name: string;
-}
+import { UserType } from "../utils/type";
 
 const useFetchUsers = () => {
   const [users, setUsers] = useState<Record<number, string>>({}); 
@@ -15,17 +10,17 @@ const useFetchUsers = () => {
   useEffect(() => {
     (async () => {
       try {
-        const data: UserType[] = await fetchUsers(); 
+        const user: UserType[] = await fetchUsers(); 
 
         const userMap: Record<number, string> = {};
-        data.forEach((user) => {
-          let fullName = `${user.first_name} ${user.last_name}`.trim();
-          userMap[user.id] = fullName || `User ${user.id}`;
+        user.forEach((user) => {
+          let fullName = `${user.first_name} ${user.last_name}`;
+          userMap[user.id] = fullName;
         });
 
         setUsers(userMap);
-      } catch (err) {
-        setError((err as Error).message);
+      } catch (error) {
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,9 @@
+import Teaser from "./teaser/page";
+
 export default function Home() {
-  <div>
+ return( <div>
     
+<Teaser/>
   </div>
+ )
 }

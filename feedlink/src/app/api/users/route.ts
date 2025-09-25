@@ -1,12 +1,12 @@
-const BASE_URL = process.env.BASE_URL;
+const baseUrl = process.env.BASE_URL;
 
 export async function GET(request: Request) {
-  if (!BASE_URL) {
+  if (!baseUrl) {
     return new Response('The system is not properly configured. Please try again.', { status: 500 });
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/users/`, {
+    const response = await fetch(`${baseUrl}/users/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

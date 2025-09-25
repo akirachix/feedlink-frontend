@@ -22,19 +22,25 @@ export default function SignInPage() {
   const { handleLogin, loading } = useLogin();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        try {
-          const parsedUser = JSON.parse(savedUser) as User;
+  if (typeof window !== 'undefined') {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser) as User;
+        if (parsedUser.email && parsedUser.role) {
           setUser(parsedUser);
-        } catch (e) {
-          console.error("Failed to parse user");
+        } else {
+          throw new Error("User missing required fields");
         }
+      } catch (e) {
+        console.error("Failed to parse user from localStorage:", e);
+        console.log("Bad user data:", savedUser);
+        localStorage.removeItem('user');
       }
     }
-    setIsLoading(false);
-  }, []);
+  }
+  setIsLoading(false);
+}, []);
 
   useEffect(() => {
   if (user && role) {
@@ -50,7 +56,7 @@ export default function SignInPage() {
     if (user.role === 'admin') {
       router.push('/admin-dashboard');
     } else if (user.role === 'producer') {
-      router.push('/producer-dashboard');
+      router.push('/dashboard');
     }
   }
 }, [user, role, router]); 
@@ -90,7 +96,7 @@ if (result && result.token && result.email) {
   if (userData.role === "admin") {
     router.push("/admin-dashboard");
   } else if (userData.role === "producer") {
-    router.push("/producer-dashboard");
+    router.push("/dashboard");
   } else {
     router.push("/");
   }

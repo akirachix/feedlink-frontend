@@ -374,7 +374,7 @@ if (!formData.lastName.trim()) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[var(--secondary-color)] hover:bg-white hover:text-[var(--secondary-color)] text-white font-bold rounded-lg transition duration-200 disabled:opacity-70 disabled:cursor-pointer"
+              className="w-full py-3 bg-[var(--secondary-color)] hover:bg-white hover:text-[var(--secondary-color)] text-white font-bold rounded-lg transition duration-200 disabled:opacity-70 cursor-pointer"
             >
               {loading ? 'Creating account...' : 'Create account'}
             </button>

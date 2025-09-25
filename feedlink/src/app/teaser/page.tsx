@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ChoicePage from '@/app/choice/page'; 
 
-export default function Home() {
+export default function Teaser() {
   const [isLeaving, setIsLeaving] = useState(false);
   const [isChoiceVisible, setIsChoiceVisible] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);

@@ -1,10 +1,9 @@
-import Image from "next/image";
-import Sidebar from "./shared-components/Sidebar";
+import Teaser from "./teaser/page";
 
 export default function Home() {
-  return (
-    <div>
-      <Sidebar/>
-    </div>
-  );
+ return( <div>
+    
+<Teaser/>
+  </div>
+ )
 }

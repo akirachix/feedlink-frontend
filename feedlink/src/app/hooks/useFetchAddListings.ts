@@ -12,11 +12,11 @@ export function useAddListing() {
       const response = await apiAddListing(formData);
       setLoading(false);
       return response;
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError((error as Error).message);
+      return null;
+    }finally{
       setLoading(false);
-      throw err;
-    }
   };
 
   return { addListing, loading, error };

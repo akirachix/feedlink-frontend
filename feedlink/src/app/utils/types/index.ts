@@ -5,6 +5,7 @@ export interface Order {
   order_date: string;
   total_amount: string;
   created_at: string;
+  order_status: string;
 }
 
 export interface Item {
@@ -99,13 +100,13 @@ export type Listing = {
   unit: string;
   producer: number;
 };
-export interface Listing {
-  listing_id: number;
-  title: string;
-  quantity: string;
-  unit: string;
+// export interface Listing {
+//   listing_id: number;
+//   title: string;
+//   quantity: string;
+//   unit: string;
   
-}
+// }
 
 interface Props {
   totalItems: number;

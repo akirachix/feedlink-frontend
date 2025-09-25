@@ -6,10 +6,10 @@ import Sidebar from "../shared-components/Sidebar";
 import { FiSearch } from "react-icons/fi";
 import Pagination from "../component/Pagination";
 import Calendar from "../component/Calendar";
-import useFetchOrders from "../hooks/useFetchOrders";
+import { useOrders } from "../hooks/useFetchOrders";
 
 export default function Orders() {
-  const { orders, loading: ordersLoading, error: ordersError } = useFetchOrders();
+  const { orders, loading: ordersLoading, error: ordersError } = useOrders();
   const { users, loading: usersLoading, error: usersError } = useFetchUsers();
   const { listings, loading: listingsLoading, error: listingsError } = useFetchListings();
 

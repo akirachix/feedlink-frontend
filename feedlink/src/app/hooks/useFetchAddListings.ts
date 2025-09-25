@@ -12,8 +12,8 @@ export function useAddListing() {
       const response = await apiAddListing(formData);
       setLoading(false);
       return response;
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred. Please try again.");
+    } catch (err) {
+      setError(err.message);
       setLoading(false);
       throw err;
     }

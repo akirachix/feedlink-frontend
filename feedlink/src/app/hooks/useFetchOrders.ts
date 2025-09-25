@@ -1,28 +1,27 @@
-'use client';
-
 import { useEffect, useState } from "react";
-import { fetchOrders } from "../utils/fetchorders";
-import { Order } from "../utils/types";
+import { fetchOrders } from "../utils/fetchOrders";
+import { OrderType } from "../utils/type";
 
-export const useOrders = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>();
+const useFetchOrders = () => {
+  const [orders, setOrders] = useState<OrderType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadOrders = async () => {
+    (async () => {
       try {
-        const data = await fetchOrders();
-        setOrders(data);
+        const order = await fetchOrders();
+        const orderArray = Array.isArray(order) ? order : [order];
+        setOrders(orderArray as OrderType[]);
       } catch (err) {
-        setError((err as Error).message) 
+        setError((err as Error).message || "Failed to fetch orders");
       } finally {
         setLoading(false);
       }
-    };
-
-    loadOrders();
+    })();
   }, []);
 
   return { orders, loading, error };
 };
+
+export default useFetchOrders;

@@ -3,7 +3,7 @@ const baseUrl = process.env.BASE_URL;
 export async function GET() {
   try {
     const response = await fetch(
-      `${baseUrl}/orders`
+      `${baseUrl}/users`
     );
     const result = await response.json();
 
@@ -16,3 +16,4 @@ export async function GET() {
     });
   }
 }
+

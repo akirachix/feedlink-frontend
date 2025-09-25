@@ -1,53 +1,41 @@
+
 import { fetchListings } from "./fetchListing";
 
+global.fetch = jest.fn();
+
 describe('fetchListings', () => {
+  const baseUrl = '/api/listings/';
+
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
-  test('resolves with data when fetch succeeds', async () => {
-    const mockData = [
-      {
-        listing_id: 1,
-        title: 'Listing 1',
-        quantity: '20',
-        unit: 'kg',
-      },
-    ];
+  it('should fetch and return listings successfully', async () => {
+    const mockListings = [{ id: 1, title: 'Nice listing' }];
+    
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockListings),
+    });
 
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockData),
-      } as Response)
-    );
+    const result = await fetchListings();
 
-    const data = await fetchListings();
-
-    expect(data).toEqual(mockData);
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('/api/listings/');
+    expect(global.fetch).toHaveBeenCalledWith(baseUrl);
+    expect(result).toEqual(mockListings);
   });
 
-  test('throws error when response is not ok', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        statusText: 'Internal Server Error',
-      } as Response)
-    );
+  it('should throw an error when response is not ok', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      statusText: 'Not Found',
+    });
 
-    await expect(fetchListings()).rejects.toThrow(
-      'Something went wrong: Internal Server Error'
-    );
+    await expect(fetchListings()).rejects.toThrow('Something went wrong: Not Found');
   });
 
-  test('throws error when fetch rejects', async () => {
-    const errorMessage = 'Network error';
-    global.fetch = jest.fn(() => Promise.reject(new Error(errorMessage)));
+  it('should throw a network error when fetch fails', async () => {
+    (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network Error'));
 
-    await expect(fetchListings()).rejects.toThrow(
-      'Failed to fetch waste claims: ' + errorMessage
-    );
+    await expect(fetchListings()).rejects.toThrow('Failed to fetch listings: Network Error');
   });
 });

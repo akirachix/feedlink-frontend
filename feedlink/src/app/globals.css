@@ -2,6 +2,9 @@
 /* @tailwind base;
 @tailwind components; */
 @tailwind utilities;
+
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,8 +13,12 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-primary: 'Nunito', sans-serif;
+
+
   --font-primary: 'Nunito', sans-serif;
   --primary-color: oklch(45.3% 0.124 130.933);
   --secondary-color: oklch(66.6% 0.179 58.318);
@@ -19,13 +26,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #ededed;
     --foreground: #ededed;
+  
   }
 }
 
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+ 
+  font-family: var(--font-primary);
+ 
 }

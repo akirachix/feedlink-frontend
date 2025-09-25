@@ -25,10 +25,10 @@ describe('SignOutConfirmationPage', () => {
     expect(screen.getByRole('button', { name: /no/i })).toBeInTheDocument();
   });
 
-  it('navigates to /inventory when clicking "Yes"', async () => {
+  it('navigates to /signin when clicking "Yes"', async () => {
     render(<SignOutConfirmationPage />);
     fireEvent.click(screen.getByRole('button', { name: /yes/i }));
-    await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/inventory'));
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/signin'));
   });
 
   it('navigates back when clicking "No"', async () => {
@@ -46,7 +46,7 @@ describe('SignOutConfirmationPage', () => {
     const container = card?.parentElement; 
 
     expect(container).toBeInTheDocument();
-    expect(container).toHaveClass('flex items-center justify-center min-h-screen bg-green-900 p-4');
+    expect(container).toHaveClass('flex items-center justify-center min-h-screen bg-[var(--primary-color)] p-4');
     expect(card).toHaveClass('bg-white rounded-2xl p-10 shadow-lg max-w-lg w-full text-center');
 
     const yesBtn = screen.getByRole('button', { name: /yes/i });

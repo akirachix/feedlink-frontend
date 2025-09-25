@@ -1,8 +1,8 @@
-const baseUrl = process.env.API_BASE_URL;
+const baseUrl = process.env.BASE_URL;
 
 export async function GET() {
   try {
-    const res = await fetch(`${baseUrl}/api/listings/`);
+    const res = await fetch(`${baseUrl}/listings/`);
     const listings = await res.json();
     return new Response(JSON.stringify(listings), { status: 200 });
   } catch (error) {

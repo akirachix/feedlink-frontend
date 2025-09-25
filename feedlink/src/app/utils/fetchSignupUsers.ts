@@ -1,4 +1,4 @@
-const baseUrl = "/api/signup"; 
+const baseUrl = "/signup"; 
 
 export async function fetchSignup(userData: object) {
  try {

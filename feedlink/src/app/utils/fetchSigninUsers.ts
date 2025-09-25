@@ -1,4 +1,4 @@
-const baseUrl = "/api/login";
+const baseUrl = "/login";
 
 export async function fetchSignin(email: string, password: string,) {
   try {

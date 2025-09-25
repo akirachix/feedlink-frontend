@@ -1,6 +1,6 @@
 export async function fetchListings() {
 try {
-    const response = await fetch('/api/listings/');
+    const response = await fetch('/listings/');
 
     if (!response.ok) {
       throw new Error("Something went wrong: " + response.statusText);

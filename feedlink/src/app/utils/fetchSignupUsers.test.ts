@@ -1,6 +1,5 @@
-import { fetchSignup } from "./fetchSignupUsers"; // Adjust path if needed
+import { fetchSignup } from "./fetchSignupUsers"; 
 
-// Mock global fetch
 global.fetch = jest.fn();
 
 describe('fetchSignup', () => {

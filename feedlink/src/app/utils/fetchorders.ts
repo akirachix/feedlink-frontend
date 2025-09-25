@@ -1,6 +1,6 @@
 export async function fetchOrders() {
   try {
-    const response = await fetch('/api/orders/');
+    const response = await fetch('/orders/');
 
     if (!response.ok) {
       throw new Error("Something went wrong: " + response.statusText);

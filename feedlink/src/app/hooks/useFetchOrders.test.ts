@@ -1,9 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { waitFor } from "@testing-library/react";
-import useFetchOrders from "./useFetchOrders";
 import { OrderType } from "../utils/type";
 
-jest.mock("../utils/fetchOrders", () => ({
+jest.mock("../utils/useFetchOrders", () => ({
   fetchOrders: jest.fn(),
 }));
 
@@ -39,7 +38,7 @@ describe("useFetchOrders", () => {
   });
 
   test("should start in loading state with empty orders and no error", () => {
-    const { result } = renderHook(() => useFetchOrders());
+    const { result } = renderHook(() => fetchOrders());
 
     expect(result.current.loading).toBe(true);
     expect(result.current.orders).toEqual([]);
@@ -49,7 +48,7 @@ describe("useFetchOrders", () => {
   test("should successfully fetch orders", async () => {
     fetchOrders.mockResolvedValueOnce(mockOrdersData);
 
-    const { result } = renderHook(() => useFetchOrders());
+    const { result } = renderHook(() => fetchOrders());
 
     expect(result.current.loading).toBe(true); 
 
@@ -65,7 +64,7 @@ describe("useFetchOrders", () => {
   test("should handle when there are no orders", async () => {
     fetchOrders.mockResolvedValueOnce([]);
 
-    const { result } = renderHook(() => useFetchOrders());
+    const { result } = renderHook(() => fetchOrders());
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -78,7 +77,7 @@ describe("useFetchOrders", () => {
   test("should handle failure during fetching with error state", async () => {
     fetchOrders.mockRejectedValueOnce(new Error("Failed to fetch"));
 
-    const { result } = renderHook(() => useFetchOrders());
+    const { result } = renderHook(() => fetchOrders());
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);

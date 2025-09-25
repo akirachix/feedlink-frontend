@@ -1,4 +1,4 @@
-import { fetchOrders } from "./fetchOrders";
+import useFetchOrders from "../hooks/useFetchOrders";
 
 global.fetch = jest.fn();
 
@@ -17,7 +17,7 @@ describe('fetchOrders (without modifying source)', () => {
       json: jest.fn().mockResolvedValue(mockOrders),
     });
 
-    const result = await fetchOrders();
+    const result = await useFetchOrders();
 
     expect(global.fetch).toHaveBeenCalledWith(baseUrl);
     expect(result).toEqual(mockOrders);
@@ -29,12 +29,12 @@ describe('fetchOrders (without modifying source)', () => {
       statusText: 'Forbidden',
     });
 
-    await expect(fetchOrders()).rejects.toThrow('Something went wrongForbidden');
+    await expect(useFetchOrders()).rejects.toThrow('Something went wrongForbidden');
   });
 
   it('should throw a network error with a message when fetching fails', async () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network Error'));
 
-    await expect(fetchOrders()).rejects.toThrow('Failed to fetch orders:Network Error');
+    await expect(useFetchOrders()).rejects.toThrow('Failed to fetch orders:Network Error');
   });
 });

@@ -1,11 +1,11 @@
-import Orders from "./orders/page";
-
+import Teaser from "./teaser/page";
 export default function Home() {
-  return (
-    <div>
-      
-       <Orders/>
-    </div>
+ return( <div>
+    
+<Teaser/>
+  </div>
+ )
+
    
-  );
+  
 }

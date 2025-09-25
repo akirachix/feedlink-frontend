@@ -1,3 +1,4 @@
+
 import { fetchListings } from "./fetchListing";
 
 global.fetch = jest.fn();

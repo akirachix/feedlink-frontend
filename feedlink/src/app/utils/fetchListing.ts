@@ -1,4 +1,3 @@
-
 const baseUrl = "/api/listings/";
 
 export async function fetchListings() {

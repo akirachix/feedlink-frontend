@@ -1,4 +1,3 @@
-// src/app/inventory/page.test.tsx
 'use client';
 
 import React from 'react';
@@ -6,7 +5,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InventoryPage from './page';
 
-// ✅ Mock all external dependencies
 jest.mock('../hooks/useFetchInventory', () => ({
   __esModule: true,
   default: () => ({
@@ -33,7 +31,6 @@ jest.mock('../utils/utils', () => ({
   isExpiringSoon: jest.fn(() => false),
 }));
 
-// ✅ Mock child components to avoid rendering them
 jest.mock('./components/InventorySummary', () => () => <div data-testid="inventory-summary" />);
 jest.mock('./components/InventoryFilters', () => () => <div data-testid="inventory-filters" />);
 jest.mock('./components/InventoryTable', () => () => <div data-testid="inventory-table" />);
@@ -43,7 +40,6 @@ jest.mock('../shared-components/Sidebar', () => () => <div data-testid="sidebar"
 
 describe('InventoryPage', () => {
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
@@ -59,7 +55,6 @@ describe('InventoryPage', () => {
   });
 
   it('displays loading state when useInventory is loading', () => {
-    // Temporarily override the mock to return loading: true
     jest.mock('../hooks/useFetchInventory', () => ({
       __esModule: true,
       default: () => ({
@@ -70,30 +65,21 @@ describe('InventoryPage', () => {
       }),
     }));
 
-    // Re-require the component to use updated mock
     const { rerender } = render(<InventoryPage />);
     
-    // Since InventoryTable is mocked, we can't test its internal loading
-    // But we can verify the page renders
+   
     expect(screen.getByText('Inventory Management')).toBeInTheDocument();
   });
 
   it('displays success message when set', async () => {
-    // We can't easily trigger successMessage from outside,
-    // but we can test that the structure supports it.
-    // For full integration, you'd need to test the actual modal flow.
+   
     render(<InventoryPage />);
     
-    // Initially no success message
     expect(screen.queryByText('Product updated successfully!')).not.toBeInTheDocument();
 
-    // Note: To test dynamic state like successMessage,
-    // you'd need to use userEvent or test child components directly.
-    // This is a unit test of the page structure, not behavior.
   });
 
   it('applies filters and pagination correctly (via mocked hooks)', () => {
-    // Mock listings with data
     const mockListings = [
       {
         listing_id: '1',
@@ -122,7 +108,6 @@ describe('InventoryPage', () => {
 
     render(<InventoryPage />);
 
-    // Since child components are mocked, we verify the page loads
     expect(screen.getByText('Inventory Management')).toBeInTheDocument();
   });
 });

@@ -1,11 +1,9 @@
-// src/app/inventory/components/InventoryTable/index.test.tsx
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InventoryTable from '../InventoryTable';
 import { Listing } from '../../../utils/types';
 
-// ✅ FIX: Mock the CORRECT path
 jest.mock('../../../utils/utils', () => ({
   capitalizeFirstLetter: (str: string) => str?.charAt(0).toUpperCase() + str?.slice(1) || '',
 }));
@@ -127,8 +125,7 @@ describe('InventoryTable', () => {
     expect(screen.getByText('Edible')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('Fruits')).toBeInTheDocument();
-    // ✅ Use exact date format or check presence differently
-    expect(screen.getByText('12/31/2025')).toBeInTheDocument(); // US format
+    expect(screen.getByText('12/31/2025')).toBeInTheDocument(); 
 
     expect(screen.getByText('Inedible')).toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();

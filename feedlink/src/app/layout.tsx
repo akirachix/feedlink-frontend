@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Nunito } from "next/font/google";
 
+
+
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],

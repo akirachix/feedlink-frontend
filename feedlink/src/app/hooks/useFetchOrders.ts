@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchOrders } from "../utils/fetchOrders";
+import { fetchOrders } from "../utils/fetchorders";
 import { OrderType } from "../utils/type";
 
 const useFetchOrders = () => {

@@ -33,13 +33,6 @@ export interface DashboardMetrics {
   recyclingPartners: number;
 }
 
-export interface Listing {
-  listing_id: number;
-  title: string;
-  quantity: string;
-  unit: string;
-  
-}
 
 export interface MonthlyData {
   month: string;
@@ -72,3 +65,51 @@ export interface BadgeProps {
   wasteClaims: WasteClaim[];
   listings: Listing[];
 }
+
+export interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  profile_picture: string;
+  address: string;
+  till_number: string;
+  latitude: number | null;
+  longitude: number | null;
+}
+
+
+export type Listing = {
+  listing_id: number;
+  product_type: string;
+  quantity: string | number;
+  category: string;
+  description: string;
+  original_price: string | null;
+  expiry_date: string | null;
+  discounted_price: string | null;
+  image: string | null;
+  image_url: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  upload_method: string;
+  pickup_window_duration: string;
+  unit: string;
+  producer: number;
+};
+export interface Listing {
+  listing_id: number;
+  title: string;
+  quantity: string;
+  unit: string;
+  
+}
+
+interface Props {
+  totalItems: number;
+  expiringSoonCount: number;
+  expiredCount: number;
+}
+

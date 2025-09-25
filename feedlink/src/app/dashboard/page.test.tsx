@@ -1,11 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Dashboard from "./page";
-
 import * as useOrdersModule from '../hooks/useFetchOrders';
 import * as useClaimsModule from '../hooks/useFetchClaims';
 import * as useListingsModule from '../hooks/useFetchListings';
-
 import { Order, WasteClaim, Listing } from '../utils/types';
 
 
@@ -96,15 +94,12 @@ describe("Dashboard Component", () => {
 
     expect(screen.getByText("Dashboard Overview")).toBeInTheDocument();
     expect(screen.getByText("Welcome Back !!!")).toBeInTheDocument();
-
     expect(screen.getByText("Total food diverted (KGS)")).toBeInTheDocument();
     expect(screen.getByText("Revenue recovered (KSH)")).toBeInTheDocument();
     expect(screen.getByText("Carbon emissions saved (T)")).toBeInTheDocument();
     expect(screen.getByText("Recycling partners")).toBeInTheDocument();
-
     expect(screen.getByText("Impact Over Time")).toBeInTheDocument();
     expect(screen.getByText("Sustainability badges")).toBeInTheDocument();
-
     expect(screen.getByRole('complementary')).toBeInTheDocument();
   });
 });

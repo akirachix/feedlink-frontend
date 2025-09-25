@@ -20,7 +20,7 @@ describe('useListings hook', () => {
     jest.clearAllMocks();
   });
 
-  it('should fetch and return listings data successfully', async () => {
+  test('should fetch and return listings data successfully', async () => {
     (fetchModule.fetchListings as jest.Mock).mockResolvedValueOnce(mockListings);
 
     const { result } = renderHook(() => useListings());
@@ -38,7 +38,7 @@ describe('useListings hook', () => {
     expect(result.current.error).toBeUndefined();
   });
 
-  it('should handle error during fetching listings', async () => {
+  test('should handle error during fetching listings', async () => {
     const errorMessage = 'Network error';
     (fetchModule.fetchListings as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 

@@ -11,7 +11,7 @@ describe('useOrders hook', () => {
     jest.resetAllMocks();
   });
 
-  it('fetches and returns orders successfully', async () => {
+  test('fetches and returns orders successfully', async () => {
     const mockOrders = [
       {
         order_id: 1,
@@ -42,7 +42,7 @@ describe('useOrders hook', () => {
     expect(result.current.error).toBeUndefined();
   });
 
-  it('handles error when fetching orders', async () => {
+  test('handles error when fetching orders', async () => {
     const errorMessage = 'Network error';
     jest.spyOn(fetchModule, 'fetchOrders').mockRejectedValueOnce(new Error(errorMessage));
 

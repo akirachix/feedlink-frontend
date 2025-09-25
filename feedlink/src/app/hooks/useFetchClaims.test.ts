@@ -25,7 +25,7 @@ describe('useWasteClaims hook', () => {
     jest.clearAllMocks();
   });
 
-  it('should fetch and return waste claims data successfully', async () => {
+  test('should fetch and return waste claims data successfully', async () => {
     (fetchModule.fetchWasteClaims as jest.Mock).mockResolvedValueOnce(mockWasteClaims);
 
     const { result } = renderHook(() => useWasteClaims());
@@ -43,7 +43,7 @@ describe('useWasteClaims hook', () => {
     expect(result.current.error).toBeUndefined();
   });
 
-  it('should handle error during fetching waste claims', async () => {
+  test('should handle error during fetching waste claims', async () => {
     const errorMessage = 'Network error';
     (fetchModule.fetchWasteClaims as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 

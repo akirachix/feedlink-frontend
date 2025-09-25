@@ -119,7 +119,7 @@ export default function Badges({ orders, wasteClaims, listings }: BadgeProps) {
   return (
     <div className="border rounded-lg p-9 w-178">
       <div className="mb-10">
-        <h2 className="text-3xl font-bold mb-4 text-[#006400]">Sustainability badges</h2>
+        <h2 className="text-3xl font-bold mb-4 text-[var(--primary-color)]">Sustainability badges</h2>
         <h5 className="text-xl">Food diverted and impact</h5>
       </div>
 

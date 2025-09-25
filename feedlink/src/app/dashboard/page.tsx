@@ -32,7 +32,7 @@ export default function Dashboard() {
       <Sidebar />
 
       <main className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold text-[#006400] mb-2">Dashboard Overview</h1>
+        <h1 className="text-3xl font-bold text-[var(--primary-color)] mb-2">Dashboard Overview</h1>
         <p className="text-gray-600 mb-8">Welcome Back !!!</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">

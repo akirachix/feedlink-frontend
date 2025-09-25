@@ -52,7 +52,7 @@ export default function Chart({ orders }: ChartProps) {
   return (
     <div className="border rounded-lg p-10 w-179">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold mb-4 text-[#006400]">Impact Over Time</h2>
+        <h2 className="text-3xl font-bold mb-4 text-[var(--primary-color)]">Impact Over Time</h2>
         <h5 className="text-lg">Food diverted</h5>
       </div>
       <div className="h-74 -ml-2">

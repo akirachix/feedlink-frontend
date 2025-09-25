@@ -5,7 +5,7 @@ describe('fetchWasteClaims', () => {
     jest.resetAllMocks();
   });
 
-  it('returns data when fetch is successful', async () => {
+  test('returns data when fetch is successful', async () => {
     const mockData = [
       {
         waste_id: 1,
@@ -32,7 +32,7 @@ describe('fetchWasteClaims', () => {
     expect(fetch).toHaveBeenCalledWith('/api/wasteclaims/');
   });
 
-  it('throws error when response is not ok', async () => {
+  test('throws error when response is not ok', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -45,7 +45,7 @@ describe('fetchWasteClaims', () => {
     );
   });
 
-  it('throws error when fetch fails', async () => {
+  test('throws error when fetch fails', async () => {
     const errorMessage = 'Network error';
     global.fetch = jest.fn(() => Promise.reject(new Error(errorMessage)));
 

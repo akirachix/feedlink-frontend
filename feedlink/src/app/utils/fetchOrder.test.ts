@@ -5,7 +5,7 @@ describe('fetchOrders', () => {
     jest.resetAllMocks();
   });
 
-  it('resolves with data when fetch succeeds', async () => {
+  test('resolves with data when fetch succeeds', async () => {
     const mockData = [
       {
         order_id: 1,
@@ -33,7 +33,7 @@ describe('fetchOrders', () => {
     expect(fetch).toHaveBeenCalledWith('/api/orders/');
   });
 
-  it('throws error when response is not ok', async () => {
+  test('throws error when response is not ok', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -46,7 +46,7 @@ describe('fetchOrders', () => {
     );
   });
 
-  it('throws error on network failure', async () => {
+  test('throws error on network failure', async () => {
     const errorMessage = 'Network error';
     global.fetch = jest.fn(() => Promise.reject(new Error(errorMessage)));
 

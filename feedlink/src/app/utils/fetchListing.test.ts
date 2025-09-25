@@ -5,7 +5,7 @@ describe('fetchListings', () => {
     jest.resetAllMocks();
   });
 
-  it('resolves with data when fetch succeeds', async () => {
+  test('resolves with data when fetch succeeds', async () => {
     const mockData = [
       {
         listing_id: 1,
@@ -29,7 +29,7 @@ describe('fetchListings', () => {
     expect(fetch).toHaveBeenCalledWith('/api/listings/');
   });
 
-  it('throws error when response is not ok', async () => {
+  test('throws error when response is not ok', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -42,7 +42,7 @@ describe('fetchListings', () => {
     );
   });
 
-  it('throws error when fetch rejects', async () => {
+  test('throws error when fetch rejects', async () => {
     const errorMessage = 'Network error';
     global.fetch = jest.fn(() => Promise.reject(new Error(errorMessage)));
 

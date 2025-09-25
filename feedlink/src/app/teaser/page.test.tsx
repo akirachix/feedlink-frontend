@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react'; // ✅ Import act from @testing-library/react
+import { render, screen, act } from '@testing-library/react'; 
 import '@testing-library/jest-dom';
 import Home from './page';
 

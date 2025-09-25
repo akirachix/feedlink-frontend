@@ -1,7 +1,7 @@
-const BASE_URL = process.env.BASE_URL
+const baseUrl = process.env.BASE_URL
 
 export async function POST(request: Request) {
-  if (!BASE_URL) {
+  if (!baseUrl) {
     return new Response('The system is not properly configured. Please try again.', { status: 500 });
   }
 
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return new Response('Missing required file: csv_file', { status: 400 });
     }
 
-    const response = await fetch(`${BASE_URL}/listings/upload-csv/`, {
+    const response = await fetch(`${baseUrl}/listings/upload-csv/`, {
       method: 'POST',
       body: formData,
     });

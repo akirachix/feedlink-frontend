@@ -1,4 +1,15 @@
+
 import '@testing-library/jest-dom';
+beforeAll(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterAll(() => {
+
+  jest.restoreAllMocks();
+});
+
+
 
   class ResizeObserver {
   observe() {}
@@ -7,3 +18,4 @@ import '@testing-library/jest-dom';
 }
 
 global.ResizeObserver = ResizeObserver;
+

@@ -1,6 +1,6 @@
 export async function fetchWasteClaims() {
   try {
-    const response = await fetch('/wasteclaims/');
+    const response = await fetch('/api/wasteclaims/');
 
     if (!response.ok) {
       throw new Error("Something went wrong: " + response.statusText);

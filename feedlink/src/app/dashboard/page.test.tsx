@@ -19,7 +19,6 @@ interface Listing {
   status: string;
 }
 
-
 jest.mock('../shared-components/Sidebar', () => () => <div data-testid="sidebar">Sidebar</div>);
 
 jest.mock('./components/Cards', () => ({ title, trend }: { title: string; trend: string }) => (
@@ -46,7 +45,6 @@ jest.mock('./components/Badges', () => ({
     Badges: {orders.length} orders, {wasteClaims.length} claims, {listings.length} listings
   </div>
 ));
-
 
 jest.mock('../hooks/useFetchOrders');
 jest.mock('../hooks/useFetchClaims');

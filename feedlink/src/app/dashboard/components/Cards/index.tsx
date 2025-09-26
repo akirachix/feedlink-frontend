@@ -92,7 +92,7 @@ export default function MetricCard({
 
   if (isFirst) {
     return (
-      <div className="bg-[var(--primary-color)] text-white p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-64 w-84">
+      <div className="bg-[var(--primary-color)] text-white p-4 rounded-lg shadow-md flex flex-col justify-center items-center h-44 md:h-32 xl:h-56 w-full max-w-xs md:max-w-sm lg:max-w-md">
         <p className="text-xl font-medium">{title}</p>
         <p className="text-7xl font-bold mt-1">{value}</p>
         {trend && <p className="text-lg mt-1">{trend}</p>}
@@ -101,8 +101,8 @@ export default function MetricCard({
   }
 
   return (
-    <div className="bg-[#006400]/60 p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-64 w-84">
-      <p className="text-xl font-medium text-black">{title}</p>
+    <div className="bg-[#006400]/60 p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-44 md:h-32 xl:h-56 w-full max-w-xs md:max-w-sm lg:max-w-md">
+      <p className="text-base md:text-lg font-medium text-black text-center">{title}</p>
       <p className="text-7xl font-bold mt-1 text-[var(--primary-color)]">{value}</p>
       {trend && <p className="text-lg text-black mt-1">{trend}</p>}
     </div>

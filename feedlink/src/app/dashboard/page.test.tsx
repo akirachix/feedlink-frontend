@@ -3,11 +3,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Dashboard from './page';
 
-// Define data types
 interface Order {
   id: number;
   amount: number;
-  // Add other fields if needed, but minimal is fine for mocks
+  
 }
 
 interface WasteClaim {
@@ -20,7 +19,7 @@ interface Listing {
   status: string;
 }
 
-// Mock components with typed props
+
 jest.mock('../shared-components/Sidebar', () => () => <div data-testid="sidebar">Sidebar</div>);
 
 jest.mock('./components/Cards', () => ({ title, trend }: { title: string; trend: string }) => (
@@ -48,7 +47,7 @@ jest.mock('./components/Badges', () => ({
   </div>
 ));
 
-// Mock hooks
+
 jest.mock('../hooks/useFetchOrders');
 jest.mock('../hooks/useFetchClaims');
 jest.mock('../hooks/useFetchListings');

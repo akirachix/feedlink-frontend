@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import WasteClaims from "./page";
 
-// Define minimal prop types for mocks
 interface PaginationProps {
   currentPage: number;
   totalPages: number;

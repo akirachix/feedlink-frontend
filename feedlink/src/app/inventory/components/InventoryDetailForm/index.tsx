@@ -1,7 +1,6 @@
 import React from "react";
 import { Listing } from "../../../utils/types";
 
-// Type-safe handler: value must match Listing[K]
 interface Props {
   selectedItem: Listing;
   editError: string | null;
@@ -38,7 +37,6 @@ const InventoryDetailForm = ({
         }}
         className="space-y-4"
       >
-        {/* Product Type */}
         <div>
           <label className="block font-semibold text-[#234B06] mb-1">Product Type</label>
           <select
@@ -52,7 +50,6 @@ const InventoryDetailForm = ({
           </select>
         </div>
 
-        {/* Quantity (string in your type!) */}
         <div>
           <label className="block font-semibold text-[#234B06] mb-1">Quantity</label>
           <input
@@ -65,7 +62,6 @@ const InventoryDetailForm = ({
           />
         </div>
 
-        {/* Category */}
         <div>
           <label className="block font-semibold text-[#234B06] mb-1">Category</label>
           <input
@@ -76,7 +72,6 @@ const InventoryDetailForm = ({
           />
         </div>
 
-        {/* Expiry Date (read-only) */}
         <div>
           <label className="block font-semibold text-[#234B06] mb-1">Expiry Date</label>
           <p className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-50 select-none cursor-not-allowed">
@@ -86,7 +81,6 @@ const InventoryDetailForm = ({
           </p>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex justify-between mt-6">
           <button
             type="button"

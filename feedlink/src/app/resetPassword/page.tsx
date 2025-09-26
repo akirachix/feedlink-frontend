@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (message && message.toLowerCase().includes('password reset successfu')) {
-      router.push('/Success');
+      router.push('/signin');
     }
   }, [message, router]);
 
@@ -112,9 +112,9 @@ export default function ResetPasswordPage() {
         backgroundPosition: 'center',
       }}
     >
-      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-40 z-10"></div>
+      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-45 z-10"></div>
       <div className="relative z-20 bg-white rounded-lg shadow-md p-14 w-[600px] flex flex-col items-center">
-        <h1 className="text-5xl font-bold text-orange-400 mb-8">Reset Password</h1>
+        <h1 className="text-5xl font-bold text-[var(--secondary-color)] mb-8">Reset Password</h1>
         <form onSubmit={handleSubmit} className="flex flex-col w-full">
           <PasswordInput
             label="Password:"
@@ -142,7 +142,7 @@ export default function ResetPasswordPage() {
           {(formError || error) && (
             <p className="text-red-500 mt-4">{formError || error}</p>
           )}
-          {message && <p className="text-green-600 mt-4">{message}</p>}
+          {message && <p className="text-[var(--primary-color)] mt-4">{message}</p>}
         </form>
       </div>
     </div>

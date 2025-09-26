@@ -1,90 +1,70 @@
-import { renderHook } from "@testing-library/react";
-import { waitFor } from "@testing-library/react";
-import { OrderType } from "../utils/type";
+import { renderHook, waitFor } from '@testing-library/react';
+import { fetchOrders } from '../utils/fetchorders';
+import { Order } from '../utils/types';
+import { useOrders } from './useFetchOrders'; 
 
-jest.mock("../utils/useFetchOrders", () => ({
+jest.mock('../utils/fetchorders', () => ({
   fetchOrders: jest.fn(),
 }));
 
-const mockOrdersData: OrderType[] = [
-  {
-    order_id: 1,
-    user: 10,
-    total_amount: "200.00",
-    order_date: "2025-09-21",
-    order_status: "pending",
-    items: [
-      { id: 1, quantity: 2, price: "100.00", listing: 4 },
-      { id: 2, quantity: 1, price: "50.00", listing: 5 },
-    ],
-  },
-  {
-    order_id: 2,
-    user: 22,
-    total_amount: "75.00",
-    order_date: "2025-09-22",
-    order_status: "picked",
-    items: [
-      { id: 3, quantity: 5, price: "15.00", listing: 6 },
-    ],
-  },
-];
+const mockFetchOrders = fetchOrders as jest.MockedFunction<typeof fetchOrders>;
 
-describe("useFetchOrders", () => {
-  const { fetchOrders } = require("../utils/fetchOrders");
+describe('useOrders', () => {
+  const mockOrders: Order[] = [
+    {
+      order_id: 1,
+      user: 101,
+      order_date: '2024-06-01',
+      total_amount: '150.00',
+      created_at: '2024-06-01T10:00:00Z',
+      order_status: 'pending',
+      items: [
+        { id: 1, quantity: 1, price: '150.00', listing: 501 },
+      ],
+    },
+    {
+      order_id: 2,
+      user: 102,
+      order_date: '2024-06-02',
+      total_amount: '80.50',
+      created_at: '2024-06-02T11:30:00Z',
+      order_status: 'completed',
+      items: [
+        { id: 2, quantity: 2, price: '40.25', listing: 502 },
+      ],
+    },
+  ];
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("should start in loading state with empty orders and no error", () => {
-    const { result } = renderHook(() => fetchOrders());
+  it('should load orders successfully', async () => {
+    mockFetchOrders.mockResolvedValue(mockOrders);
+
+    const { result } = renderHook(() => useOrders());
 
     expect(result.current.loading).toBe(true);
+    expect(result.current.error).toBeUndefined();
     expect(result.current.orders).toEqual([]);
-    expect(result.current.error).toBeNull();
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.orders).toEqual(mockOrders);
+    expect(result.current.error).toBeUndefined();
   });
 
-  test("should successfully fetch orders", async () => {
-    fetchOrders.mockResolvedValueOnce(mockOrdersData);
+  it('should handle error when fetching orders fails', async () => {
+    const errorMessage = 'Failed to fetch orders';
+    mockFetchOrders.mockRejectedValue(new Error(errorMessage));
 
-    const { result } = renderHook(() => fetchOrders());
+    const { result } = renderHook(() => useOrders());
 
-    expect(result.current.loading).toBe(true); 
+    expect(result.current.loading).toBe(true);
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
-    expect(result.current.orders).toEqual(mockOrdersData);
-    expect(result.current.error).toBeNull();
-  });
-
-
-  test("should handle when there are no orders", async () => {
-    fetchOrders.mockResolvedValueOnce([]);
-
-    const { result } = renderHook(() => fetchOrders());
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     expect(result.current.orders).toEqual([]);
-    expect(result.current.error).toBeNull();
+    expect(result.current.error).toBe(errorMessage);
   });
-
-  test("should handle failure during fetching with error state", async () => {
-    fetchOrders.mockRejectedValueOnce(new Error("Failed to fetch"));
-
-    const { result } = renderHook(() => fetchOrders());
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
-    expect(result.current.orders).toEqual([]);
-    expect(result.current.error).toBe("Failed to fetch");
-  });
-
 });

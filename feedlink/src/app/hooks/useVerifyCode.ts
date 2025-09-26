@@ -13,7 +13,6 @@ export function useVerifyCode() {
     setLoading(true);
     try {
       const response = await verifyCodeApi(email, code);
-      // console.log('API response:', response);
       if ( response.detail === 'OTP verified.') {
         setSuccess(true);
       } else {

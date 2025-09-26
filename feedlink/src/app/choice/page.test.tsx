@@ -47,16 +47,13 @@ describe('ChoiceScreen', () => {
 
   it('renders both role buttons with correct labels', () => {
     render(<ChoiceScreen />);
-    expect(screen.getByRole('button', { name: 'Admin' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Producer' })).toBeInTheDocument();
   });
 
   it('has proper accessibility attributes', () => {
     render(<ChoiceScreen />);
-    const adminBtn = screen.getByRole('button', { name: 'Admin' });
     const producerBtn = screen.getByRole('button', { name: 'Producer' });
 
-    expect(adminBtn).toBeVisible();
     expect(producerBtn).toBeVisible();
   });
 });

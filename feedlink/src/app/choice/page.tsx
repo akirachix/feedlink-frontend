@@ -34,12 +34,7 @@ export default function ChoiceScreen() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-15 justify-center items-center ">
-          <button
-            className="bg-[var(--secondary-color)] text-white hover:bg-white hover:text-[var(--secondary-color)] w-50 font-bold py-4 px-12 rounded-lg shadow-lg transition transform cursor-pointer hover:scale-105"
-            onClick={() => window.location.href = '/signin?role=admin'}
-          >
-            Admin
-          </button>
+        
 
           <button
             className="bg-white hover:bg-[var(--secondary-color)] text-[var(--secondary-color)] hover:text-white w-50 font-bold py-4 px-12 rounded-lg border-2 border-[var(--secondary-color)] shadow-lg transition cursor-pointer transform hover:scale-105"

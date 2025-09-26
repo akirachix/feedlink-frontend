@@ -3,7 +3,6 @@ import { act } from 'react';
 import * as fetchInventory from '../utils/fetchInventory';
 import useInventory from './useFetchInventory';
 
-// Define the shape of your listing data
 interface Seller {
   id: string;
   name: string;
@@ -14,7 +13,7 @@ interface Listing {
   title: string;
   price: number;
   seller: Seller;
-  createdAt: string; // ISO string
+  createdAt: string; 
 }
 
 jest.mock('../utils/fetchInventory', () => ({

@@ -32,6 +32,7 @@ describe('InventoryDetailForm', () => {
       closeDetailModal: jest.fn(),
     };
 
+    render(<InventoryDetailForm {...mockProps} />);
     expect(true).toBe(true); 
   });
 });

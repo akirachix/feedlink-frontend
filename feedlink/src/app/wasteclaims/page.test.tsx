@@ -1,6 +1,18 @@
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import WasteClaims from "./page";
 
+// Define minimal prop types for mocks
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+interface CalendarProps {
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void;
+}
+
 const mockWasteclaimsHook = require("../hooks/useFetchWasteclaims");
 
 jest.mock("../hooks/useFetchWasteclaims", () => ({
@@ -34,12 +46,28 @@ jest.mock("../hooks/useFetchListing", () => ({
 }));
 
 jest.mock("../shared-components/Sidebar", () => () => <div data-testid="sidebar" />);
-jest.mock("../component/Pagination", () => ({ currentPage, totalPages, onPageChange }: any) =>
-  <div data-testid="pagination" data-current-page={currentPage} data-total-pages={totalPages} />
-);
-jest.mock("../component/Calendar", () => ({ selectedDate, setSelectedDate }: any) =>
-  <input data-testid="calendar" value={selectedDate || ""} readOnly />
-);
+
+jest.mock("../component/Pagination", () => ({
+  __esModule: true,
+  default: ({ currentPage, totalPages }: PaginationProps) => (
+    <div
+      data-testid="pagination"
+      data-current-page={currentPage}
+      data-total-pages={totalPages}
+    />
+  ),
+}));
+
+jest.mock("../component/Calendar", () => ({
+  __esModule: true,
+  default: ({ selectedDate }: CalendarProps) => (
+    <input
+      data-testid="calendar"
+      value={selectedDate ? selectedDate.toISOString().split("T")[0] : ""}
+      readOnly
+    />
+  ),
+}));
 
 beforeEach(() => {
   mockWasteclaimsHook.default.mockImplementation(() => ({
@@ -167,7 +195,6 @@ describe("WasteClaims page", () => {
     expect(screen.getByText(/Unknown Kgs/i)).toBeInTheDocument();
   });
 
-  
   test("handles a situation where user is not found", () => {
     mockWasteclaimsHook.default.mockImplementationOnce(() => ({
       wasteClaims: [

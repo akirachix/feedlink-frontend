@@ -39,20 +39,17 @@ const InventoryPage = () => {
   }, [successMessage]);
 
   const listingsWithStatus = useMemo<Listing[]>(() => {
-    return listings
-      .map((item) => {
-        const expired = item.expiry_date ? isExpired(item.expiry_date) : false;
-        return {
-          ...item,
-          status: expired ? "expired" : "available",
-          quantity: Number(item.quantity),
-        };
-      })
-      .sort((a, b) => {
-        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-        return dateB - dateA; 
-      });
+    return listings.map((item) => {
+      const expired = item.expiry_date ? isExpired(item.expiry_date) : false;
+      return {
+        ...item,
+        status: expired ? "expired" : "available",
+      };
+    }).sort((a, b) => {
+      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return dateB - dateA; 
+    });
   }, [listings]);
 
   const filteredListings = useMemo<Listing[]>(() => {
@@ -115,11 +112,13 @@ const InventoryPage = () => {
     closeModal();
   };
 
-  const handleDetailChange = (field: keyof Listing, value: any) => {
+  const handleDetailChange = <K extends keyof Listing>(
+    field: K,
+    value: Listing[K]
+  ) => {
     if (!selectedItem) return;
     setSelectedItem({ ...selectedItem, [field]: value });
   };
-
   const handleUpdate = async () => {
     if (!selectedItem) return;
     setEditLoading(true);
@@ -143,7 +142,7 @@ const InventoryPage = () => {
         upload_method: selectedItem.upload_method,
         pickup_window_duration: pickupWindowISO,
         unit: selectedItem.unit,
-        image_url: selectedItem.image_url || "https://via.placeholder.com/150  ",
+        image_url: selectedItem.image_url || "https://via.placeholder.com/150",
         producer: selectedItem.producer || null,
       };
 
@@ -177,8 +176,12 @@ const InventoryPage = () => {
       await refresh();
       setSuccessMessage("Product updated successfully!");
       closeDetailModal();
-    } catch (err: any) {
-      setEditError(err.message || "Unknown network error");
+    }  catch (err: unknown) {
+      console.error('Delete error:', err);
+      const message = err instanceof Error 
+        ? err.message 
+        : 'Unknown error occurred while deleting item';
+      setEditError(message);
     } finally {
       setEditLoading(false);
     }
@@ -223,9 +226,12 @@ const InventoryPage = () => {
       await refresh();
       setSuccessMessage("Product deleted successfully!");
       closeModal();
-    } catch (err: any) {
+    }  catch (err: unknown) {
       console.error('Delete error:', err);
-      setEditError(err.message || "Unknown error occurred while deleting item");
+      const message = err instanceof Error 
+        ? err.message 
+        : 'Unknown error occurred while deleting item';
+      setEditError(message);
     } finally {
       setEditLoading(false);
     }

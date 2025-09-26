@@ -23,7 +23,7 @@ export default function Orders() {
   const totalOrders = orders.length;
   const filteredOrders = orders.filter((order) => {
     const statusMatch = selectedStatus === "all" ? true : order.order_status === selectedStatus;
-    const dateMatch = selectedDate ? new Date(order.order_date).toDateString() === selectedDate.toDateString(): true;
+    const dateMatch = selectedDate ? new Date(order.order_date).toDateString() === selectedDate.toDateString() : true;
     const searchMatch = searchTerm === "" ? true : (users[order.user] ?? "").toLowerCase().includes(searchTerm.toLowerCase());
     return statusMatch && dateMatch && searchMatch;
   });
@@ -59,22 +59,20 @@ export default function Orders() {
         </div>
         <div className="mb-8 space-y-4">
           <div className="flex items-center gap-24 ">
-            {["all", "pending", "picked"].map((status) => (
-              <label key={status} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="status"
-                  value={status}
-                  checked={selectedStatus === status}
-                  onChange={() => setSelectedStatus(status as any)}
-                  className="sr-only"
-                />
+          {(["all", "pending", "picked"] as const).map((status) => (
+  <label key={status} className="flex items-center cursor-pointer">
+    <input
+      type="radio"
+      name="status"
+      checked={selectedStatus === status}
+      onChange={() => setSelectedStatus(status)} 
+      className="sr-only"
+    />
                 <div
-                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center transition-colors ${
-                    selectedStatus === status
+                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center transition-colors ${selectedStatus === status
                       ? "bg-[var(--primary-color)] border-[var(--primary-color)]"
                       : "border-[var(--primary-color)]"
-                  }`} >
+                    }`} >
                 </div>
                 <span className="ml-2 capitalize text-[var(--primary-color)] font-bold text-xl">
                   {status}
@@ -152,11 +150,10 @@ export default function Orders() {
                     </td>
                     <td className="px-4 py-4">
                       <span
-                        className={`inline-block px-3 py-1 text-xs font-semibold rounded-md capitalize ${
-                          order.order_status === "picked"
+                        className={`inline-block px-3 py-1 text-xs font-semibold rounded-md capitalize ${order.order_status === "picked"
                             ? "bg-[var(--primary-color)] text-white"
                             : "bg-[var(--secondary-color)] text-white"
-                        }`} >
+                          }`} >
                         {order.order_status}
                       </span>
                     </td>

@@ -28,13 +28,19 @@ const Csv = ({ onSuccess, onCancel }: CsvProps) => {
       setError("Please select a CSV file to upload.");
       return;
     }
+
     setLoading(true);
     setError(null);
+
     try {
       await uploadCsvFile(file);
       onSuccess();
-    } catch (err: any) {
-      setError(err.message || "Failed to upload CSV file.");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to upload CSV file.");
+      }
     } finally {
       setLoading(false);
     }

@@ -14,7 +14,7 @@ const useFetchUsers = () => {
 
         const userMap: Record<number, string> = {};
         user.forEach((user) => {
-          let fullName = `${user.first_name} ${user.last_name}`;
+          const fullName = `${user.first_name} ${user.last_name}`;
           userMap[user.id] = fullName;
         });
 

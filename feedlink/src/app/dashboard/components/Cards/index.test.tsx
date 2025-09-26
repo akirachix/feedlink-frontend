@@ -1,38 +1,75 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import MetricCard from ".";
-import { Order, WasteClaim, Listing} from '../../../utils/types/index';
-
+import { Order, WasteClaim, Listing } from '../../../utils/types/index';
 describe("MetricCard Component", () => {
   const sampleOrders: Order[] = [
     {
       order_id: 1,
       items: [
-        { quantity: 5, price: "10", listing: 101 },
-        { quantity: 10, price: "15", listing: 102 },
+        { id: 1, quantity: 5, price: "10", listing: 101 },
+        { id: 2, quantity: 10, price: "15", listing: 102 },
       ],
       user: 1,
       order_date: "2025-09-01",
       total_amount: "250",
       created_at: "2025-09-01T12:00:00Z",
+      order_status: "picked",
     },
     {
       order_id: 2,
       items: [
-        { quantity: 15, price: "20", listing: 103 },
+        { id: 3, quantity: 15, price: "20", listing: 103 },
       ],
       user: 2,
       order_date: "2025-09-02",
       total_amount: "300",
       created_at: "2025-09-02T12:00:00Z",
+      order_status: "pending",
     },
   ];
-
   const sampleListings: Listing[] = [
-    { listing_id: 101, title: "Listing 1", quantity: "20", unit: "kg" },
-    { listing_id: 102, title: "Listing 2", quantity: "30", unit: "kg" },
+    {
+      listing_id: 101,
+      title: "Listing 1",
+      quantity: "20",
+      unit: "kg",
+      product_type: "food",
+      category: "produce",
+      description: "Test listing 1",
+      original_price: null,
+      expiry_date: null,
+      discounted_price: null,
+      image: null,
+      image_url: "",
+      status: "active",
+      created_at: "2025-09-01T10:00:00Z",
+      updated_at: "2025-09-01T10:00:00Z",
+      upload_method: "manual",
+      pickup_window_duration: "2h",
+      producer: 1,
+    },
+    {
+      listing_id: 102,
+      title: "Listing 2",
+      quantity: "30",
+      unit: "kg",
+      product_type: "food",
+      category: "dairy",
+      description: "Test listing 2",
+      original_price: null,
+      expiry_date: null,
+      discounted_price: null,
+      image: null,
+      image_url: "",
+      status: "active",
+      created_at: "2025-09-01T10:00:00Z",
+      updated_at: "2025-09-01T10:00:00Z",
+      upload_method: "manual",
+      pickup_window_duration: "2h",
+      producer: 2,
+    },
   ];
-
   const sampleWasteClaims: WasteClaim[] = [
     {
       waste_id: 1,
@@ -55,7 +92,6 @@ describe("MetricCard Component", () => {
       claim_time: "2025-09-02T15:05:00Z",
     },
   ];
-
   test("displays Total food diverted (KGS) correctly", () => {
     render(
       <MetricCard
@@ -67,12 +103,10 @@ describe("MetricCard Component", () => {
         isFirst={true}
       />
     );
-
     expect(screen.getByText("Total food diverted (KGS)")).toBeInTheDocument();
     expect(screen.getByText("80")).toBeInTheDocument();
     expect(screen.getByText("+5%")).toBeInTheDocument();
   });
-
   test("displays Revenue recovered (KSH) correctly", () => {
     render(
       <MetricCard
@@ -84,11 +118,9 @@ describe("MetricCard Component", () => {
         isFirst={false}
       />
     );
-
     expect(screen.getByText("Revenue recovered (KSH)")).toBeInTheDocument();
     expect(screen.getByText("550")).toBeInTheDocument();
   });
-
   test("displays Carbon emissions saved (T) correctly", () => {
     render(
       <MetricCard
@@ -100,11 +132,9 @@ describe("MetricCard Component", () => {
         isFirst={false}
       />
     );
-
     expect(screen.getByText("Carbon emissions saved (T)")).toBeInTheDocument();
     expect(screen.getByText("0.1")).toBeInTheDocument();
   });
-
   test("displays Recycling partners correctly", () => {
     render(
       <MetricCard
@@ -116,7 +146,6 @@ describe("MetricCard Component", () => {
         isFirst={false}
       />
     );
-
     expect(screen.getByText("Recycling partners")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
   });

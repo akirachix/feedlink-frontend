@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import  {fetchListings } from "../utils/fetchInventory";
-import { Listing, User } from "../utils/types";
+import { Listing } from "../utils/types";
 
 
 const useInventory = () => {

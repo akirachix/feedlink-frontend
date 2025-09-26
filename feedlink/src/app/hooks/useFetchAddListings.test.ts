@@ -1,4 +1,3 @@
-
 import { renderHook, act } from '@testing-library/react';
 import { useAddListing } from './useFetchAddListings';
 import * as fetchAddListings from '../utils/fetchAddListings';
@@ -33,12 +32,10 @@ describe('useAddListing', () => {
     await act(async () => {
       try {
         await result.current.addListing(formData);
-      } catch (e) {
-       
+      } catch {
       }
     });
 
-    
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBe('API request failed');
   });

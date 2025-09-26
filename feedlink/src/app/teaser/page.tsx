@@ -3,26 +3,23 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ChoicePage from '@/app/choice/page'; 
 
 export default function Teaser() {
   const [isLeaving, setIsLeaving] = useState(false);
   const [isChoiceVisible, setIsChoiceVisible] = useState(false);
-  const [hasNavigated, setHasNavigated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLeaving(true); 
+      setIsLeaving(true);
 
       setTimeout(() => {
         setIsChoiceVisible(true);
 
         setTimeout(() => {
           router.push('/choice');
-          setHasNavigated(true);
-        }, 500); 
-      }, 50); 
+        }, 500);
+      }, 50);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -37,7 +34,7 @@ export default function Teaser() {
               isChoiceVisible ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
-            <ChoicePage />
+           
           </div>
         </div>
       )}
@@ -55,7 +52,6 @@ export default function Teaser() {
           priority
           className="z-0"
         />
-
         <div className="absolute inset-0 bg-[var(--primary-color)] opacity-10 z-10"></div>
       </div>
     </div>

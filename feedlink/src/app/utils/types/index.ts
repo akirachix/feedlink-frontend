@@ -104,9 +104,4 @@ export interface Listing  {
 };
 
 
-interface Props {
-  totalItems: number;
-  expiringSoonCount: number;
-  expiredCount: number;
-}
 

@@ -10,12 +10,7 @@ jest.mock('../utils/fetchorders', () => ({
 const mockFetchOrders = fetchOrders as jest.MockedFunction<typeof fetchOrders>;
 
 
-interface Item {
-  id: number;
-  name: string;
-  quantity: number;
-  price: string;
-}
+
 
 describe('useOrders', () => {
   const mockOrders: Order[] = [

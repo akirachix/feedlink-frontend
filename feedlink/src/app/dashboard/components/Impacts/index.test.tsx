@@ -4,7 +4,6 @@ import Chart from './';
 import { Order } from '../../../utils/types/index';
 import React from 'react';
 
-// Define types for the mocked Recharts components
 interface ResponsiveContainerProps {
   children: React.ReactNode;
 }
@@ -22,14 +21,12 @@ interface XAxisProps {
   dataKey: string;
 }
 
-// Define the shape of the data passed to BarChart
 interface ChartDataPoint {
   month: string;
   weight: number;
   revenue: number;
 }
 
-// Mock Recharts with proper types
 jest.mock('recharts', () => {
   const OriginalModule = jest.requireActual('recharts');
   return {

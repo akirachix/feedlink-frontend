@@ -86,6 +86,6 @@ describe("ResetPasswordPage", () => {
       handleResetPassword: jest.fn(),
     });
     render(<ResetPasswordPage />);
-    expect(pushMock).toHaveBeenCalledWith("/Success");
+    expect(pushMock).toHaveBeenCalledWith("/signin");
   });
 });

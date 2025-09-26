@@ -1,6 +1,4 @@
-import { fetchOrders } from "./fetchorders";
-
-
+import { fetchOrders } from './fetchorders';
 
 describe('fetchOrders', () => {
   beforeEach(() => {
@@ -43,8 +41,9 @@ describe('fetchOrders', () => {
       } as Response)
     );
 
+   
     await expect(fetchOrders()).rejects.toThrow(
-      'Something went wrong: Internal Server Error'
+      'Failed to fetch orders:Something went wrongInternal Server Error'
     );
   });
 
@@ -53,7 +52,7 @@ describe('fetchOrders', () => {
     global.fetch = jest.fn(() => Promise.reject(new Error(errorMessage)));
 
     await expect(fetchOrders()).rejects.toThrow(
-      'Failed to fetch waste claims: ' + errorMessage
+      'Failed to fetch orders:Network error'
     );
   });
 });

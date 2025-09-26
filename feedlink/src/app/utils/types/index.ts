@@ -1,5 +1,5 @@
 export interface Order {
-  order_id: number;
+  order_id: number | string;
   items: Item[];
   user: number;
   order_date: string;
@@ -9,9 +9,10 @@ export interface Order {
 }
 
 export interface Item {
+  id: number;
   quantity: number;
   price: string;
-  listing: number;
+  listing: number; 
 }
 
 export interface WasteClaim {

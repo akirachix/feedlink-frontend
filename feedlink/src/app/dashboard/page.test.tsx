@@ -1,105 +1,105 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import Dashboard from "./page";
-import * as useOrdersModule from '../hooks/useFetchOrders';
-import * as useClaimsModule from '../hooks/useFetchClaims';
-import * as useListingsModule from '../hooks/useFetchListings';
-import { Order, WasteClaim, Listing } from '../utils/types';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Dashboard from './page'; 
 
+
+jest.mock('../shared-components/Sidebar', () => () => <div data-testid="sidebar">Sidebar</div>);
+jest.mock('./components/Cards', () => ({ title, trend }: { title: string; trend: string }) => (
+  <div data-testid="metric-card">
+    <h3>{title}</h3>
+    <p>{trend}</p>
+  </div>
+));
+jest.mock('./components/Impacts', () => ({ orders }: { orders: any }) => (
+  <div data-testid="chart">Chart with {orders.length} orders</div>
+));
+jest.mock('./components/Badges', () => ({
+  orders,
+  wasteClaims,
+  listings,
+}: {
+  orders: any;
+  wasteClaims: any;
+  listings: any;
+}) => (
+  <div data-testid="badges">
+    Badges: {orders.length} orders, {wasteClaims.length} claims, {listings.length} listings
+  </div>
+));
 
 jest.mock('../hooks/useFetchOrders');
 jest.mock('../hooks/useFetchClaims');
 jest.mock('../hooks/useFetchListings');
 
-describe("Dashboard Component", () => {
-  afterEach(() => {
-    jest.resetAllMocks(); 
+const mockUseOrders = require('../hooks/useFetchOrders').useOrders;
+const mockUseWasteClaims = require('../hooks/useFetchClaims').useWasteClaims;
+const mockUseListings = require('../hooks/useFetchListings').useListings;
+
+describe('Dashboard', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("renders loading state initially", () => {
-    jest.spyOn(useOrdersModule, 'useOrders').mockReturnValue({
-      orders: [] as Order[],
-      loading: true,
-      error: undefined,
-    });
-
-    jest.spyOn(useClaimsModule, 'useWasteClaims').mockReturnValue({
-      wasteClaims: [] as WasteClaim[],
-      loading: true,
-      error: undefined,
-    });
-
-    jest.spyOn(useListingsModule, 'useListings').mockReturnValue({
-      listings: [] as Listing[],
-      loading: true,
-      error: undefined,
-    });
+  it('shows loading state when any hook is loading', () => {
+    mockUseOrders.mockReturnValue({ orders: null, loading: true });
+    mockUseWasteClaims.mockReturnValue({ wasteClaims: null, loading: false });
+    mockUseListings.mockReturnValue({ listings: null, loading: false });
 
     render(<Dashboard />);
 
-    expect(screen.getByText("Loading dashboard...")).toBeInTheDocument();
+    expect(screen.getByText('Loading dashboard...')).toBeInTheDocument();
   });
 
-  test("renders dashboard main content when data available", () => {
-    const mockOrders: Order[] = [
-      {
-        order_id: 1,
-        items: [
-          { quantity: 5, price: "10", listing: 101 },
-          { quantity: 10, price: "15", listing: 102 },
-        ],
-        user: 1,
-        order_date: "2025-09-01",
-        total_amount: "250",
-        created_at: "2025-09-01T12:00:00Z",
-      },
-    ];
+  it('renders nothing if data is missing after loading', () => {
+    mockUseOrders.mockReturnValue({ orders: null, loading: false });
+    mockUseWasteClaims.mockReturnValue({ wasteClaims: null, loading: false });
+    mockUseListings.mockReturnValue({ listings: null, loading: false });
 
-    const mockWasteClaims: WasteClaim[] = [
-      {
-        waste_id: 1,
-        listing_id: 101,
-        user: 1,
-        claim_status: "approved",
-        pin: "1234",
-        created_at: "2025-09-01T15:00:00Z",
-        updated_at: "2025-09-01T15:30:00Z",
-        claim_time: "2025-09-01T15:05:00Z",
-      },
-    ];
+    const { container } = render(<Dashboard />);
 
-    const mockListings: Listing[] = [
-      { listing_id: 101, title: "Listing 1", quantity: "20", unit: "kg" },
-    ];
+    expect(container).toBeEmptyDOMElement();
+  });
 
-    jest.spyOn(useOrdersModule, 'useOrders').mockReturnValue({
-      orders: mockOrders,
-      loading: false,
-      error: undefined,
-    });
+  it('renders dashboard content when all data is loaded', async () => {
+    const mockOrders = [{ id: 1, amount: 10 }];
+    const mockClaims = [{ id: 1, kg: 5 }];
+    const mockListings = [{ id: 1, status: 'active' }];
 
-    jest.spyOn(useClaimsModule, 'useWasteClaims').mockReturnValue({
-      wasteClaims: mockWasteClaims,
-      loading: false,
-      error: undefined,
-    });
-
-    jest.spyOn(useListingsModule, 'useListings').mockReturnValue({
-      listings: mockListings,
-      loading: false,
-      error: undefined,
-    });
+    mockUseOrders.mockReturnValue({ orders: mockOrders, loading: false });
+    mockUseWasteClaims.mockReturnValue({ wasteClaims: mockClaims, loading: false });
+    mockUseListings.mockReturnValue({ listings: mockListings, loading: false });
 
     render(<Dashboard />);
 
-    expect(screen.getByText("Dashboard Overview")).toBeInTheDocument();
-    expect(screen.getByText("Welcome Back !!!")).toBeInTheDocument();
-    expect(screen.getByText("Total food diverted (KGS)")).toBeInTheDocument();
-    expect(screen.getByText("Revenue recovered (KSH)")).toBeInTheDocument();
-    expect(screen.getByText("Carbon emissions saved (T)")).toBeInTheDocument();
-    expect(screen.getByText("Recycling partners")).toBeInTheDocument();
-    expect(screen.getByText("Impact Over Time")).toBeInTheDocument();
-    expect(screen.getByText("Sustainability badges")).toBeInTheDocument();
-    expect(screen.getByRole('complementary')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Dashboard Overview')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('sidebar')).toBeInTheDocument();
+
+    const metricCards = screen.getAllByTestId('metric-card');
+    expect(metricCards).toHaveLength(4);
+
+    expect(screen.getByText('Total food diverted (KGS)')).toBeInTheDocument();
+    expect(screen.getByText('Revenue recovered (KSH)')).toBeInTheDocument();
+    expect(screen.getByText('Carbon emissions saved (T)')).toBeInTheDocument();
+    expect(screen.getByText('Recycling partners')).toBeInTheDocument();
+
+    expect(screen.getByText('Every kg feeds hope')).toBeInTheDocument();
+    expect(screen.getByText('Funding sustainability')).toBeInTheDocument();
+
+    expect(screen.getByTestId('chart')).toBeInTheDocument();
+    expect(screen.getByTestId('badges')).toBeInTheDocument();
   });
 
+  it('handles partial loading correctly (e.g., only orders loading)', () => {
+    mockUseOrders.mockReturnValue({ orders: null, loading: true });
+    mockUseWasteClaims.mockReturnValue({ wasteClaims: [], loading: false });
+    mockUseListings.mockReturnValue({ listings: [], loading: false });
+
+    render(<Dashboard />);
+
+    expect(screen.getByText('Loading dashboard...')).toBeInTheDocument();
+  });
+});

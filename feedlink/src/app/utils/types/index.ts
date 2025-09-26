@@ -68,7 +68,7 @@ export interface BadgeProps {
 }
 
 export interface User {
-  id: number;
+  id: number | string;
   first_name: string;
   last_name: string;
   email: string;
@@ -81,7 +81,7 @@ export interface User {
 }
 
 
-export type Listing = {
+export interface Listing  {
   listing_id: number;
   product_type: string;
   quantity: string | number;
@@ -99,14 +99,8 @@ export type Listing = {
   pickup_window_duration: string;
   unit: string;
   producer: number;
+  title: string;
 };
-// export interface Listing {
-//   listing_id: number;
-//   title: string;
-//   quantity: string;
-//   unit: string;
-  
-// }
 
 interface Props {
   totalItems: number;

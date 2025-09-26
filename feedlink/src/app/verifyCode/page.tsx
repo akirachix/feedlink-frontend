@@ -90,9 +90,9 @@ export default function VerifyCodePage() {
       }}
     >
 
-      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-40 z-10" />
+      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-45 z-10" />
       <div className="relative z-20 bg-white rounded-lg shadow-md p-14 w-[600px] flex flex-col gap-8 text-center">
-        <h1 className="text-4xl font-bold text-orange-400">Verification Code</h1>
+        <h1 className="text-5xl font-bold text-[var(--secondary-color)]">Verification Code</h1>
         <p className="text-gray-800">
           Enter the code sent to <span className="font-semibold">{email}</span>
         </p>
@@ -134,7 +134,7 @@ export default function VerifyCodePage() {
         </div>
 
         {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-600">Code verified successfully!</p>}
+        {success && <p className="text-[var(--primary-color)]">Code verified successfully!</p>}
       </div>
     </div>
   );

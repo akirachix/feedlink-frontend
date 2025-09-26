@@ -20,13 +20,13 @@ export default function ForgetPasswordPage() {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-40 z-10"></div>
+      <div className="absolute inset-0 bg-[var(--primary-color)] opacity-45 z-10"></div>
 
       <form
         onSubmit={handleSubmit}
         className="relative z-10 bg-white rounded-lg shadow-md p-14 flex flex-col gap-8 w-[600px]"
       >
-        <h1 className="text-center text-orange-500 font-semibold text-4xl mb-6">
+        <h1 className="text-center text-[var(--secondary-color)] font-semibold text-5xl   'xl mb-6">
           Forget Password
         </h1>
         <label htmlFor="email" className="text-[var(--primary-color)] font-semibold text-lg">Email</label>
@@ -50,7 +50,7 @@ export default function ForgetPasswordPage() {
 
         {error && <p className="text-red-500 mt-3 text-center text-lg">{error}</p>}
         {success && (
-          <p className="text-green-900 mt-3 text-center text-lg">
+          <p className="text-[var(--primary-color)]  mt-3 text-center text-lg">
             OTP has been sent to this email
           </p>
         )}

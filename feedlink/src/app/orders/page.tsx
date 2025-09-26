@@ -12,48 +12,37 @@ export default function Orders() {
   const { orders, loading: ordersLoading, error: ordersError } = useOrders();
   const { users, loading: usersLoading, error: usersError } = useFetchUsers();
   const { listings, loading: listingsLoading, error: listingsError } = useFetchListings();
-
   const loading = ordersLoading || usersLoading || listingsLoading;
   const error = ordersError || usersError || listingsError;
-
   const [selectedStatus, setSelectedStatus] = useState<"all" | "pending" | "picked">("all");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
-
   const totalCustomers = new Set(orders.map((order) => order.user)).size;
   const totalOrders = orders.length;
-
   const filteredOrders = orders.filter((order) => {
     const statusMatch = selectedStatus === "all" ? true : order.order_status === selectedStatus;
     const dateMatch = selectedDate ? new Date(order.order_date).toDateString() === selectedDate.toDateString(): true;
     const searchMatch = searchTerm === "" ? true : (users[order.user] ?? "").toLowerCase().includes(searchTerm.toLowerCase());
-
     return statusMatch && dateMatch && searchMatch;
   });
-
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedOrders = filteredOrders.slice(startIndex, startIndex + itemsPerPage);
-
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-3xl font-bold text-[var(--primary-color)] mb-4">
           Orders
         </h1>
         <p className="mb-6 text-[15px]">Track the orders made</p>
-
         <div className="flex gap-18 mb-10">
           <div className="bg-[#9FB68E] p-3 rounded-lg shadow-sm w-73 flex flex-col justify-between h-28">
             <h3 className="text-3xl font-semibold">Total customers</h3>
@@ -68,7 +57,6 @@ export default function Orders() {
             </p>
           </div>
         </div>
-
         <div className="mb-8 space-y-4">
           <div className="flex items-center gap-24 ">
             {["all", "pending", "picked"].map((status) => (
@@ -94,7 +82,6 @@ export default function Orders() {
               </label>
             ))}
           </div>
-
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-xs">
               <input
@@ -104,16 +91,14 @@ export default function Orders() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               />
-              <FiSearch className="h-5 w-5 text-[#7a8f70] absolute left-3 top-2.5" />
+              <FiSearch className="h-5 w-5 text-[#7A8F70] absolute left-3 top-2.5" />
             </div>
-
             <Calendar
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
             />
           </div>
         </div>
-
         <div className="overflow-x-auto bg-white rounded-sm border border-[var(--primary-color)]">
           <table className="w-full table-auto">
             <thead>
@@ -187,7 +172,6 @@ export default function Orders() {
             </tbody>
           </table>
         </div>
-
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

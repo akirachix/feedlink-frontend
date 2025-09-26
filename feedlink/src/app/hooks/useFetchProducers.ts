@@ -14,7 +14,7 @@ export function useProducers() {
         const producersData = await fetchProducers();
         setProducers(producersData);
       } catch (err) {
-        setProducerError("Failed to load producers. Please try again.");
+        setProducerError((err as Error).message);
       } finally {
         setLoadingProducers(false);
       }

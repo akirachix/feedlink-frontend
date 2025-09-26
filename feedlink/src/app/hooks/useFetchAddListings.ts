@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { addListing as apiAddListing } from "../utils/fetchAddListings";
 
@@ -9,15 +10,17 @@ export function useAddListing() {
     setLoading(true);
     setError("");
     try {
-      const response = await apiAddListing(formData);
+      const result = await apiAddListing(formData);
       setLoading(false);
-      return response;
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred. Please try again.");
+      return result;
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
       setLoading(false);
-      throw err;
     }
   };
 
   return { addListing, loading, error };
 }
+
+

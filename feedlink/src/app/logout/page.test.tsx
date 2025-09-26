@@ -47,11 +47,18 @@ describe('SignOutConfirmationPage', () => {
 
     expect(container).toBeInTheDocument();
     expect(container).toHaveClass('flex items-center justify-center min-h-screen bg-[var(--primary-color)] p-4');
-    expect(card).toHaveClass('bg-white rounded-2xl p-10 shadow-lg max-w-lg w-full text-center');
+    expect(card).toHaveClass('bg-white rounded-2xl p-19 shadow-lg max-w-lg w-full text-center');
+
+
+
 
     const yesBtn = screen.getByRole('button', { name: /yes/i });
     const noBtn = screen.getByRole('button', { name: /no/i });
-    expect(yesBtn).toHaveClass('px-8 py-3 bg-green-800 text-white rounded-md hover:bg-green-700 transition text-lg font-medium');
-    expect(noBtn).toHaveClass('px-8 py-3 border border-green-800 text-green-800 rounded-md hover:bg-green-50 transition text-lg font-medium');
-  });
-});
+    expect(yesBtn).toHaveClass(
+      'px-11 py-3 bg-white border border-green-800 text-green-800 rounded-md hover:bg-[var(--secondary-color)] transition text-lg font-medium'
+    );
+       expect(noBtn).toHaveClass(
+      'px-11 py-3 border bg-green-800 border-green-800 text-white rounded-md hover:bg-[var(--secondary-color)] transition text-lg font-medium'
+    );
+      });
+    });

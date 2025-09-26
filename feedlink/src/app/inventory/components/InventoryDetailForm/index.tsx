@@ -1,16 +1,16 @@
 import React from "react";
 import { Listing } from "../../../utils/types";
 
-
 interface Props {
   selectedItem: Listing;
   editError: string | null;
   editLoading: boolean;
-  handleDetailChange: (field: keyof Listing, value: any) => void;
+  handleDetailChange: <K extends keyof Listing>(field: K, value: Listing[K]) => void;
   handleUpdate: () => Promise<void>;
   openDeleteConfirmModal: () => void;
   closeDetailModal: () => void;
 }
+
 const InventoryDetailForm = ({
   selectedItem,
   editError,
@@ -54,10 +54,10 @@ const InventoryDetailForm = ({
           <label className="block font-semibold text-[#234B06] mb-1">Quantity</label>
           <input
             type="number"
-            min={0}
+            min="0"
             value={selectedItem.quantity}
-            onChange={(e) => handleDetailChange("quantity", Number(e.target.value))}
-            className="w-full border border-gray-300 rounded px-3 py-2 cursor-pointer"
+            onChange={(e) => handleDetailChange("quantity", e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2"
             required
           />
         </div>
@@ -66,9 +66,9 @@ const InventoryDetailForm = ({
           <label className="block font-semibold text-[#234B06] mb-1">Category</label>
           <input
             type="text"
-            value={selectedItem.category ?? ''}
+            value={selectedItem.category}
             onChange={(e) => handleDetailChange("category", e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 cursor-pointer"
+            className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
 

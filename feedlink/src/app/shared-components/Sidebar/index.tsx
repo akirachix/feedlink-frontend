@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,7 +33,7 @@ export default function Sidebar() {
       }}
     >
       <div className="absolute top-16 left-8 flex flex-col items-start gap-2 select-none ml-3">
-        <img
+      <Image
           src="/images/logo.svg"
           alt="FeedLink Logo"
           width={400}

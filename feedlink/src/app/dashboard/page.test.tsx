@@ -1,27 +1,45 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Dashboard from './page'; 
+import Dashboard from './page';
 
+interface Order {
+  id: number;
+  amount: number;
+  
+}
+
+interface WasteClaim {
+  id: number;
+  kg: number;
+}
+
+interface Listing {
+  id: number;
+  status: string;
+}
 
 jest.mock('../shared-components/Sidebar', () => () => <div data-testid="sidebar">Sidebar</div>);
+
 jest.mock('./components/Cards', () => ({ title, trend }: { title: string; trend: string }) => (
   <div data-testid="metric-card">
     <h3>{title}</h3>
     <p>{trend}</p>
   </div>
 ));
-jest.mock('./components/Impacts', () => ({ orders }: { orders: any }) => (
+
+jest.mock('./components/Impacts', () => ({ orders }: { orders: Order[] }) => (
   <div data-testid="chart">Chart with {orders.length} orders</div>
 ));
+
 jest.mock('./components/Badges', () => ({
   orders,
   wasteClaims,
   listings,
 }: {
-  orders: any;
-  wasteClaims: any;
-  listings: any;
+  orders: Order[];
+  wasteClaims: WasteClaim[];
+  listings: Listing[];
 }) => (
   <div data-testid="badges">
     Badges: {orders.length} orders, {wasteClaims.length} claims, {listings.length} listings
@@ -62,9 +80,9 @@ describe('Dashboard', () => {
   });
 
   it('renders dashboard content when all data is loaded', async () => {
-    const mockOrders = [{ id: 1, amount: 10 }];
-    const mockClaims = [{ id: 1, kg: 5 }];
-    const mockListings = [{ id: 1, status: 'active' }];
+    const mockOrders: Order[] = [{ id: 1, amount: 10 }];
+    const mockClaims: WasteClaim[] = [{ id: 1, kg: 5 }];
+    const mockListings: Listing[] = [{ id: 1, status: 'active' }];
 
     mockUseOrders.mockReturnValue({ orders: mockOrders, loading: false });
     mockUseWasteClaims.mockReturnValue({ wasteClaims: mockClaims, loading: false });

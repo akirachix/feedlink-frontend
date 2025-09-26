@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InventoryModals from '../InventoryModals';
 import { Listing } from '../../../utils/types';
-
 
 jest.mock('../AddItem', () => {
   return ({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: () => void }) => (
@@ -24,18 +22,26 @@ jest.mock('../Csv', () => {
   );
 });
 
+interface InventoryDetailFormProps {
+  selectedItem: Listing | null;
+  editError: string | null;
+  editLoading: boolean;
+  handleUpdate: () => void;
+  openDeleteConfirmModal: () => void;
+  closeDetailModal: () => void;
+}
+
 jest.mock('../InventoryDetailForm', () => {
   return ({
     selectedItem,
     editError,
     editLoading,
-    handleDetailChange,
     handleUpdate,
     openDeleteConfirmModal,
     closeDetailModal,
-  }: any) => (
+  }: InventoryDetailFormProps) => (
     <div data-testid="detail-form-mock">
-      <p>Editing: {selectedItem.product_type}</p>
+      <p>Editing: {selectedItem?.product_type || 'N/A'}</p>
       {editError && <p role="alert">{editError}</p>}
       <button onClick={handleUpdate} disabled={editLoading}>
         {editLoading ? 'Saving...' : 'Save'}
@@ -49,7 +55,7 @@ jest.mock('../InventoryDetailForm', () => {
 const mockListing: Listing = {
   listing_id: 1,
   product_type: 'edible',
-  quantity: 10,
+  quantity: '10',
   category: 'Fruits',
   description: 'Fresh apples',
   original_price: '2.50',
@@ -64,6 +70,7 @@ const mockListing: Listing = {
   pickup_window_duration: '2 hours',
   unit: 'kg',
   producer: 123,
+  title: 'Fresh Apples',
 };
 
 describe('InventoryModals', () => {
@@ -84,7 +91,7 @@ describe('InventoryModals', () => {
     selectedItem: null as Listing | null,
     editError: null as string | null,
     editLoading: false,
-    handleDetailChange: mockHandleDetailChange,
+    handleDetailChange: mockHandleDetailChange, 
     handleUpdate: mockHandleUpdate,
     confirmDelete: mockConfirmDelete,
     refresh: mockRefresh,
@@ -113,7 +120,6 @@ describe('InventoryModals', () => {
     fireEvent.click(csvBtn);
     expect(mockSetModalContent).toHaveBeenCalledWith('csv');
 
-   
     fireEvent.click(screen.getByText('Cancel'));
     expect(mockCloseModal).toHaveBeenCalled();
   });
@@ -123,9 +129,8 @@ describe('InventoryModals', () => {
 
     expect(screen.getByTestId('add-item-mock')).toBeInTheDocument();
 
-    
     fireEvent.click(screen.getByText('Mock Add Success'));
-    expect(mockOnSuccess).toHaveBeenCalledWith("Product uploaded successfully!");
+    expect(mockOnSuccess).toHaveBeenCalledWith('Product uploaded successfully!');
     expect(mockCloseModal).toHaveBeenCalled();
     expect(mockRefresh).toHaveBeenCalled();
   });
@@ -135,9 +140,8 @@ describe('InventoryModals', () => {
 
     expect(screen.getByTestId('csv-mock')).toBeInTheDocument();
 
-    
     fireEvent.click(screen.getByText('Mock CSV Success'));
-    expect(mockOnSuccess).toHaveBeenCalledWith("Products uploaded successfully via CSV!");
+    expect(mockOnSuccess).toHaveBeenCalledWith('Products uploaded successfully via CSV!');
     expect(mockCloseModal).toHaveBeenCalled();
     expect(mockRefresh).toHaveBeenCalled();
   });
@@ -184,15 +188,17 @@ describe('InventoryModals', () => {
         selectedItem={mockListing}
       />
     );
-
+  
     expect(screen.getByText('Confirm Delete')).toBeInTheDocument();
-    expect(screen.getByText('"edible"')).toBeInTheDocument();
-
+  
+    const paragraph = screen.getByText(/Are you sure/).closest('p');
+    expect(paragraph).toBeInTheDocument();
+    expect(paragraph?.textContent).toMatch(/Are you sure you want to delete 'edible'\?/);
+  
     fireEvent.click(screen.getByText('Cancel'));
     expect(mockCloseModal).toHaveBeenCalled();
-
+  
     fireEvent.click(screen.getByText('Delete'));
     expect(mockConfirmDelete).toHaveBeenCalled();
   });
-
-  });
+});

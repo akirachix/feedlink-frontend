@@ -1,8 +1,5 @@
 "use client";
-
 import { Order, WasteClaim, Listing, MetricCardProps } from '../../../utils/types/index';
-
-
 export default function MetricCard({
   title,
   orders,
@@ -11,14 +8,10 @@ export default function MetricCard({
   trend,
   isFirst = false,
 }: MetricCardProps) {
-
-
   const listingMap = new Map<number, Listing>();
   for (const listing of listings) {
     listingMap.set(listing.listing_id, listing);
   }
-
- 
   const calculateFoodFromOrders = (orders: Order[]): number => {
     let total = 0;
     for (const order of orders) {
@@ -29,22 +22,16 @@ export default function MetricCard({
     }
     return total;
   };
-
-
   const calculateFoodFromWasteClaims = (claims: WasteClaim[], listingMap: Map<number, Listing>): number => {
     let total = 0;
     for (const claim of claims) {
       const listing = listingMap.get(claim.listing_id);
       if (!listing) continue;
-
-      const quantity = parseFloat(listing.quantity);
-
+      const quantity = typeof listing.quantity === "string" ? parseFloat(listing.quantity) : listing.quantity;
       total += quantity;
     }
     return total;
   };
-
-
   const calculateRevenue = (orders: Order[]): number => {
     let total = 0;
     for (const order of orders) {
@@ -52,15 +39,11 @@ export default function MetricCard({
     }
     return total;
   };
-
-
   const calculateCarbonSavedFromWaste = (claims: WasteClaim[], listingMap: Map<number, Listing>): number => {
     const CO2_PER_KG = 2.5;
     const totalWeight = calculateFoodFromWasteClaims(claims, listingMap);
     return totalWeight * CO2_PER_KG;
   };
-
-
   const countRecyclingPartners = (claims: WasteClaim[]): number => {
     const userIds = new Set<number>();
     for (const claim of claims) {
@@ -68,43 +51,36 @@ export default function MetricCard({
     }
     return userIds.size;
   };
-
-
   const foodFromOrders = calculateFoodFromOrders(orders);
   const foodFromWaste = calculateFoodFromWasteClaims(wasteClaims, listingMap);
   const foodDiverted = foodFromOrders + foodFromWaste;
   const revenueRecovered = calculateRevenue(orders);
   const carbonSaved = calculateCarbonSavedFromWaste(wasteClaims, listingMap);
   const recyclingPartners = countRecyclingPartners(wasteClaims);
-
-
   let value: string | number = 0;
   if (title === "Total food diverted (KGS)") {
     value = foodDiverted.toLocaleString();
   } else if (title === "Revenue recovered (KSH)") {
     value = revenueRecovered.toLocaleString();
   } else if (title === "Carbon emissions saved (T)") {
-    value = (carbonSaved / 1000).toFixed(1); 
+    value = (carbonSaved / 1000).toFixed(1);
   } else if (title === "Recycling partners") {
     value = recyclingPartners.toLocaleString();
   }
-
-
   if (isFirst) {
     return (
-      <div className="bg-[var(--primary-color)] text-white p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-64 w-84">
-        <p className="text-xl font-medium">{title}</p>
-        <p className="text-7xl font-bold mt-1">{value}</p>
-        {trend && <p className="text-lg mt-1">{trend}</p>}
+      <div className="bg-[var(--primary-color)] text-white p-2 sm:p-4 lg:p-5 xl:p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-28 sm:h-36 md:h-44 xl:h-56 w-full">
+        <p className="text-sm sm:text-base xl:text-xl font-medium">{title}</p>
+        <p className="text-2xl sm:text-4xl xl:text-6xl font-bold mt-1">{value}</p>
+        {trend && <p className="text-xs sm:text-sm xl:text-lg mt-1">{trend}</p>}
       </div>
     );
   }
-
   return (
-    <div className="bg-[#006400]/60 p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-64 w-84">
-      <p className="text-xl font-medium text-black">{title}</p>
-      <p className="text-7xl font-bold mt-1 text-[var(--primary-color)]">{value}</p>
-      {trend && <p className="text-lg text-black mt-1">{trend}</p>}
+    <div className="bg-[#006400]/60 p-2 sm:p-4 lg:p-5 xl:p-6 rounded-lg shadow-md flex flex-col justify-center items-center h-28 sm:h-36 md:h-44 xl:h-56 w-full">
+      <p className="text-sm sm:text-base xl:text-xl font-medium text-black">{title}</p>
+      <p className="text-2xl sm:text-4xl xl:text-6xl font-bold mt-1 text-[var(--primary-color)]">{value}</p>
+      {trend && <p className="text-xs sm:text-sm xl:text-lg text-black mt-1">{trend}</p>}
     </div>
   );
 }

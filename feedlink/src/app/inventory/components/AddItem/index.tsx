@@ -35,10 +35,9 @@ const AddItem = ({ onSuccess, onCancel }: AddItemProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-
+  
     if (!productType) {
-      alert("Please select the praoduct type.");
+      alert("Please select the product type.");
       return;
     }
     if (!producer) {
@@ -65,7 +64,7 @@ const AddItem = ({ onSuccess, onCancel }: AddItemProps) => {
       alert("Please enter a valid expiry date.");
       return;
     }
-
+  
     if (originalPrice !== "" && isNaN(Number(originalPrice))) {
       alert("Original price must be a valid number.");
       return;
@@ -74,35 +73,24 @@ const AddItem = ({ onSuccess, onCancel }: AddItemProps) => {
       alert("Discounted price must be a valid number.");
       return;
     }
-
-    try {
-      const formData = new FormData();
-      formData.append("product_type", productType);
-      formData.append("producer", producer);
-      formData.append("quantity", quantity.toString());
-      formData.append("unit", unit);
-      formData.append("upload_method", uploadMethod);
-      formData.append("pickup_window_duration", new Date(pickupWindowDuration).toISOString());
-
-      if (category) formData.append("category", category);
-      if (description) formData.append("description", description);
-
-
-      if (originalPrice !== "") {
-        formData.append("original_price", originalPrice);
-      }
-      if (discountedPrice !== "") {
-        formData.append("discounted_price", discountedPrice);
-      }
-
-      if (expiryDate) formData.append("expiry_date", new Date(expiryDate).toISOString());
-      if (image) formData.append("image", image);
-
-      await addListing(formData);
-      onSuccess();
-    } catch (err) {
-
-    }
+  
+    const formData = new FormData();
+    formData.append("product_type", productType);
+    formData.append("producer", producer);
+    formData.append("quantity", quantity.toString());
+    formData.append("unit", unit);
+    formData.append("upload_method", uploadMethod);
+    formData.append("pickup_window_duration", new Date(pickupWindowDuration).toISOString());
+  
+    if (category) formData.append("category", category);
+    if (description) formData.append("description", description);
+    if (originalPrice !== "") formData.append("original_price", originalPrice);
+    if (discountedPrice !== "") formData.append("discounted_price", discountedPrice);
+    if (expiryDate) formData.append("expiry_date", new Date(expiryDate).toISOString());
+    if (image) formData.append("image", image);
+  
+    await addListing(formData);
+    onSuccess();
   };
 
   return (

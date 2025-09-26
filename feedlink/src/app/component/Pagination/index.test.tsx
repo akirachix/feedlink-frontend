@@ -3,10 +3,10 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import Pagination from "./index";
 
 jest.mock("lucide-react", () => ({
-  ChevronLeft: ({ size, strokeWidth }: { size?: number; strokeWidth?: number }) => (
+  ChevronLeft: ({ size }: { size?: number }) => (
     <svg data-testid="chevron-left" width={size} />
   ),
-  ChevronRight: ({ size, strokeWidth }: { size?: number; strokeWidth?: number }) => (
+  ChevronRight: ({ size }: { size?: number }) => (
     <svg data-testid="chevron-right" width={size} />
   ),
 }));

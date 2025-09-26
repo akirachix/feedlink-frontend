@@ -85,7 +85,7 @@ export interface User {
 export interface Listing  {
   listing_id: number;
   product_type: string;
-  quantity: string | number;
+  quantity: string ;
   category: string;
   description: string;
   original_price: string | null;
@@ -104,9 +104,4 @@ export interface Listing  {
 };
 
 
-interface Props {
-  totalItems: number;
-  expiringSoonCount: number;
-  expiredCount: number;
-}
 

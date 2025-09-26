@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 import Sidebar from "../shared-components/Sidebar";
 import MetricCard from "./components/Cards";
@@ -8,12 +9,14 @@ import { useOrders } from "../hooks/useFetchOrders";
 import { useWasteClaims } from "../hooks/useFetchClaims";
 import { useListings } from "../hooks/useFetchListings";
 import { User } from "../utils/type";
+
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const { orders, loading: ordersLoading } = useOrders();
   const { wasteClaims, loading: wasteClaimsLoading } = useWasteClaims();
   const { listings, loading: listingsLoading } = useListings();
   const loading = ordersLoading || wasteClaimsLoading || listingsLoading;
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedUser = localStorage.getItem('user');
@@ -29,6 +32,7 @@ export default function Dashboard() {
       }
     }
   }, []);
+
   if (loading) {
     return (
       <div className="flex h-screen bg-gray-50 items-center justify-center">
@@ -42,17 +46,23 @@ export default function Dashboard() {
   const displayName = user?.first_name
     ? `${user.first_name} ${user.last_name || ''}`.trim()
     : "there";
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold text-[var(--primary-color)] mb-2">
+      <main className="flex-1 overflow-y-auto
+                       px-4 py-6
+                       md:px-8 md:py-8
+                       lg:px-12 lg:py-10
+                       xl:px-16 xl:py-12 max-w-full">
+        <h1 className="text-2xl md:text-3xl font-bold text-[var(--primary-color)] mb-2">
           Dashboard Overview
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 mb-8 text-base md:text-lg">
           Welcome back, <span className="font-semibold">{displayName}</span>!
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-10 max-w-full">
           <MetricCard
             title="Total food diverted (KGS)"
             orders={orders}
@@ -86,7 +96,8 @@ export default function Dashboard() {
             isFirst={false}
           />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 max-w-full">
           <div className="mt-5">
             <Chart orders={orders} />
           </div>

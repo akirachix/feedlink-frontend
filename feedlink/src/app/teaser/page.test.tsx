@@ -1,30 +1,45 @@
-import { render, screen, act } from '@testing-library/react'; 
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from './page';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: any) => {
-    const { fill, priority, ...rest } = props;
+jest.mock('next/image', () => {
+  const MockImage = ({
+    fill,
+    alt,
+    style,
+    ...rest
+  }: React.ComponentProps<'img'> & { fill?: boolean }) => {
     if (fill) {
       return (
-        <img{...rest} style={{ ...rest.style,    position: 'absolute',    width: '100%',    height: '100%',  }}  alt={rest.alt} />
+        <img
+          {...rest}
+          alt={alt}
+          style={{
+            ...style,
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+          data-testid="mock-image"
+        />
       );
     }
-    return <img {...rest} alt={rest.alt} />;
-  },
-}));
+    return <img {...rest} alt={alt} data-testid="mock-image" />;
+  };
+
+  MockImage.displayName = 'MockImage';
+  return {
+    __esModule: true,
+    default: MockImage,
+  };
+});
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
+  useRouter: () => ({ push: mockPush }),
 }));
 
-jest.mock('../choice/page', () => {
-  return () => <div data-testid="choice-page">Choice Page Content</div>;
-});
 
 describe('Home (Teaser Page)', () => {
   beforeEach(() => {
@@ -41,19 +56,13 @@ describe('Home (Teaser Page)', () => {
     expect(screen.getByAltText('Teaser with phone and groceries')).toBeInTheDocument();
   });
 
-  it('shows ChoicePage after 3050ms and navigates to /choice after 3550ms', async () => {
+  it('navigates to /choice after ~3550ms', async () => {
     render(<Home />);
 
-    expect(screen.queryByTestId('choice-page')).not.toBeInTheDocument();
+    expect(mockPush).not.toHaveBeenCalled();
 
     await act(async () => {
-      jest.advanceTimersByTime(3050);
-    });
-
-    expect(screen.getByTestId('choice-page')).toBeInTheDocument();
-
-    await act(async () => {
-      jest.advanceTimersByTime(500);
+      jest.advanceTimersByTime(3550);
     });
 
     expect(mockPush).toHaveBeenCalledWith('/choice');

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState} from "react";
 import useFetchWasteclaims from "../hooks/useFetchWasteclaims";
 import useFetchUsers from "../hooks/useFetchUsers";
 import Sidebar from "../shared-components/Sidebar";

@@ -3,19 +3,33 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SignUpPage from './page';
 
+const mockPush = jest.fn();
+
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: mockPush }),
 }));
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: ({ src, alt, fill, width, height, ...props }: any) => {
+jest.mock('next/image', () => {
+  const MockImage = ({
+    src,
+    alt,
+    fill,
+    width,
+    height,
+    ...props
+  }: React.ComponentProps<'img'> & { fill?: boolean }) => {
     if (fill) {
       return <div data-testid="fill-image" {...props} />;
     }
     return <img src={src} alt={alt} width={width} height={height} {...props} />;
-  },
-}));
+  };
+
+  MockImage.displayName = 'MockImage';
+  return {
+    __esModule: true,
+    default: MockImage,
+  };
+});
 
 const mockLocalStorage = {
   getItem: jest.fn(),
@@ -23,6 +37,7 @@ const mockLocalStorage = {
   removeItem: jest.fn(),
   clear: jest.fn(),
 };
+
 Object.defineProperty(window, 'localStorage', {
   value: mockLocalStorage,
 });
@@ -43,6 +58,7 @@ jest.mock('../hooks/useFetchSignupUser', () => ({
 describe('SignUpPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockPush.mockClear();
   });
 
   it('renders without crashing', () => {
@@ -50,7 +66,6 @@ describe('SignUpPage', () => {
     expect(screen.getByText(/Sign Up/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Enter email/i)).toBeInTheDocument();
   });
-
 
   it('toggles password visibility', async () => {
     render(<SignUpPage />);
@@ -71,9 +86,6 @@ describe('SignUpPage', () => {
   });
 
   it('handles successful signup and redirects', async () => {
-    const mockPush = jest.fn();
-    jest.mocked(require('next/navigation')).useRouter = () => ({ push: mockPush });
-
     render(<SignUpPage />);
 
     fireEvent.change(screen.getByLabelText(/First name/i), { target: { value: 'John' } });
@@ -81,8 +93,8 @@ describe('SignUpPage', () => {
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'john@example.com' } });
     fireEvent.change(screen.getByLabelText(/Till Number/i), { target: { value: '123456' } });
     fireEvent.change(screen.getByLabelText(/Address/i), { target: { value: 'Nairobi' } });
-    fireEvent.change(screen.getByLabelText(/Password:/i), { target: { value: 'pass123' } });
-    fireEvent.change(screen.getByLabelText(/Confirm password/i), { target: { value: 'pass123' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'pass123' } });
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'pass123' } });
 
     fireEvent.click(screen.getByRole('button', { name: /Create account/i }));
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InventoryFilters from './index';
 
@@ -28,56 +28,55 @@ describe('InventoryFilters', () => {
   });
 
   it('renders all filter controls', () => {
-    render(<InventoryFilters {...defaultProps} />);
-    expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument();
-    expect(screen.getByText('Select category')).toBeInTheDocument();
-    expect(screen.getByText('All status')).toBeInTheDocument();
-    expect(screen.getByTitle('Filter by upload date')).toBeInTheDocument();
-    expect(screen.getByText('Upload')).toBeInTheDocument();
+    const { getByPlaceholderText, getByText, getByTitle } = render(<InventoryFilters {...defaultProps} />);
+    expect(getByPlaceholderText('Search...')).toBeInTheDocument();
+    expect(getByText('Select category')).toBeInTheDocument();
+    expect(getByText('All status')).toBeInTheDocument();
+    expect(getByTitle('Filter by upload date')).toBeInTheDocument();
+    expect(getByText('Upload')).toBeInTheDocument();
   });
 
   it('updates search term when typing', () => {
-    render(<InventoryFilters {...defaultProps} />);
-    const input = screen.getByPlaceholderText('Search...');
+    const { getByPlaceholderText } = render(<InventoryFilters {...defaultProps} />);
+    const input = getByPlaceholderText('Search...');
     fireEvent.change(input, { target: { value: 'apples' } });
     expect(mockSetSearchTerm).toHaveBeenCalledWith('apples');
   });
 
   it('opens and selects a category from CustomSelect', async () => {
-    render(<InventoryFilters {...defaultProps} />);
-    fireEvent.click(screen.getByText('Select category'));
-    const option = await screen.findByText('Fruits');
+    const { getByText, findByText } = render(<InventoryFilters {...defaultProps} />);
+    fireEvent.click(getByText('Select category'));
+    const option = await findByText('Fruits');
     fireEvent.click(option);
     expect(mockSetCategoryFilter).toHaveBeenCalledWith('Fruits');
   });
 
   it('opens and selects a status from CustomSelect', async () => {
-    render(<InventoryFilters {...defaultProps} />);
-    fireEvent.click(screen.getByText('All status'));
-    const option = await screen.findByText('Expired');
+    const { getByText, findByText } = render(<InventoryFilters {...defaultProps} />);
+    fireEvent.click(getByText('All status'));
+    const option = await findByText('Expired');
     fireEvent.click(option);
     expect(mockSetStatusFilter).toHaveBeenCalledWith('expired');
   });
 
-  
   it('updates upload date when date is selected', () => {
-    render(<InventoryFilters {...defaultProps} />);
-    const dateInput = screen.getByTitle('Filter by upload date');
+    const { getByTitle } = render(<InventoryFilters {...defaultProps} />);
+    const dateInput = getByTitle('Filter by upload date');
     fireEvent.change(dateInput, { target: { value: '2024-06-15' } });
     expect(mockSetUploadDateFilter).toHaveBeenCalledWith('2024-06-15');
   });
 
   it('calls onUploadClick when Upload button is clicked', () => {
-    render(<InventoryFilters {...defaultProps} />);
-    fireEvent.click(screen.getByText('Upload'));
+    const { getByText } = render(<InventoryFilters {...defaultProps} />);
+    fireEvent.click(getByText('Upload'));
     expect(mockOnUploadClick).toHaveBeenCalled();
   });
 
   it('closes CustomSelect when clicking outside', async () => {
-    const { container } = render(<InventoryFilters {...defaultProps} />);
-    fireEvent.click(screen.getByText('Select category'));
-    await screen.findByText('Fruits');
+    const { getByText, findByText, queryByText } = render(<InventoryFilters {...defaultProps} />);
+    fireEvent.click(getByText('Select category'));
+    await findByText('Fruits');
     fireEvent.mouseDown(document.body);
-    expect(screen.queryByText('Fruits')).not.toBeInTheDocument();
+    expect(queryByText('Fruits')).not.toBeInTheDocument();
   });
 });

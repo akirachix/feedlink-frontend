@@ -102,6 +102,7 @@ export interface Listing  {
   title: string;
 };
 
+
 interface Props {
   totalItems: number;
   expiringSoonCount: number;

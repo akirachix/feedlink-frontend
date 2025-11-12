@@ -12,11 +12,11 @@ interface CalendarProps {
   setSelectedDate: (date: Date | null) => void;
 }
 
-const mockUseOrdersHook = require("../hooks/useFetchOrders");
+const mockUseFetchOrdersHook = require("../hooks/useFetchOrders");
 
-jest.mock("../hooks/useOrders", () => ({
+jest.mock("../hooks/useFetchOrders", () => ({
   __esModule: true,
-  default: jest.fn(),
+  useOrders: jest.fn(), 
 }));
 
 jest.mock("../hooks/useFetchUsers", () => ({
@@ -75,7 +75,7 @@ jest.mock("../component/Calendar", () => ({
 }));
 
 beforeEach(() => {
-  mockUseOrdersHook.default.mockImplementation(() => ({
+  mockUseFetchOrdersHook.useOrders.mockImplementation(() => ({
     orders: [
       {
         order_id: 1,
@@ -87,9 +87,7 @@ beforeEach(() => {
         pin: "12345",
         created_at: "2025-09-21T10:00:00Z",
         updated_at: "2025-09-21T10:00:00Z",
-        items: [
-          { id: 1, quantity: 2, price: "75.00", listing: 201 }
-        ],
+        items: [],
       },
       {
         order_id: 2,
@@ -101,9 +99,7 @@ beforeEach(() => {
         pin: "67890",
         created_at: "2025-09-22T15:30:00Z",
         updated_at: "2025-09-22T15:30:00Z",
-        items: [
-          { id: 2, quantity: 1, price: "200.00", listing: 202 }
-        ],
+        items: [],
       },
       {
         order_id: 3,
@@ -115,9 +111,7 @@ beforeEach(() => {
         pin: "54321",
         created_at: "2025-09-21T10:00:00Z",
         updated_at: "2025-09-21T10:00:00Z",
-        items: [
-          { id: 3, quantity: 1, price: "100.00", listing: 201 }
-        ],
+        items: [],
       },
     ],
     loading: false,
@@ -134,9 +128,12 @@ describe("Orders page", () => {
   test("renders totals and table by default", () => {
     render(<Orders />);
     expect(screen.getByText("Total customers")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getByText("Total orders")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
+    const totalCustomersElement = screen.getByText("Total customers").closest('div')?.querySelector('p');
+    expect(totalCustomersElement).toHaveTextContent("3");
+    
+    const totalOrdersElement = screen.getByText("Total orders").closest('div')?.querySelector('p');
+    expect(totalOrdersElement).toHaveTextContent("3");
+    
     expect(screen.getByText("Semhal Estifanos")).toBeInTheDocument();
     expect(screen.getByText("Pauline Mwihaki")).toBeInTheDocument();
     expect(screen.getByText("Kisanet Sshay")).toBeInTheDocument();
@@ -151,7 +148,7 @@ describe("Orders page", () => {
   });
 
   test("shows loading state", () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [],
       loading: true,
       error: null,
@@ -162,7 +159,7 @@ describe("Orders page", () => {
   });
 
   test("shows error state", () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [],
       loading: false,
       error: "Something went wrong",
@@ -173,7 +170,7 @@ describe("Orders page", () => {
   });
 
   test("shows empty state", () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [],
       loading: false,
       error: null,
@@ -211,7 +208,7 @@ describe("Orders page", () => {
   });
 
   test("pagination updates currentPage", async () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: Array.from({ length: 10 }, (_, i) => ({
         order_id: i + 1,
         user: 101,
@@ -222,9 +219,7 @@ describe("Orders page", () => {
         pin: `${1000 + i}`,
         created_at: `2025-09-21T${10 + i}:00:00Z`,
         updated_at: `2025-09-21T${10 + i}:00:00Z`,
-        items: [
-          { id: i + 1, quantity: 1, price: "100.00", listing: 201 }
-        ],
+        items: [],
       })),
       loading: false,
       error: null,
@@ -236,7 +231,7 @@ describe("Orders page", () => {
   });
 
   test("handles a situation where user is not found", () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [
         {
           order_id: 4,
@@ -248,9 +243,7 @@ describe("Orders page", () => {
           pin: "22222",
           created_at: "2025-09-21T10:00:00Z",
           updated_at: "2025-09-21T10:00:00Z",
-          items: [
-            { id: 4, quantity: 1, price: "100.00", listing: 201 }
-          ],
+          items: [],
         },
       ],
       loading: false,
@@ -265,7 +258,7 @@ describe("Orders page", () => {
   });
 
   test("handles missing pin gracefully", () => {
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [
         {
           order_id: 5,
@@ -277,9 +270,7 @@ describe("Orders page", () => {
           pin: null,
           created_at: "2025-09-21T10:00:00Z",
           updated_at: "2025-09-21T10:00:00Z",
-          items: [
-            { id: 5, quantity: 1, price: "100.00", listing: 201 }
-          ],
+          items: [],
         },
       ],
       loading: false,
@@ -292,7 +283,7 @@ describe("Orders page", () => {
 
   test("updates status when dropdown option is selected", async () => {
     const mockUpdateStatus = jest.fn();
-    mockUseOrdersHook.default.mockImplementationOnce(() => ({
+    mockUseFetchOrdersHook.useOrders.mockImplementationOnce(() => ({
       orders: [
         {
           order_id: 1,
@@ -304,9 +295,7 @@ describe("Orders page", () => {
           pin: "12345",
           created_at: "2025-09-21T10:00:00Z",
           updated_at: "2025-09-21T10:00:00Z",
-          items: [
-            { id: 1, quantity: 1, price: "100.00", listing: 201 }
-          ],
+          items: [],
         }
       ],
       loading: false,
@@ -314,10 +303,13 @@ describe("Orders page", () => {
       updateOrderStatus: mockUpdateStatus,
     }));
     render(<Orders />);
+    
     const statusSelect = screen.getByText("Pending");
     fireEvent.click(statusSelect);
+    
     const pickedOption = screen.getByText("Picked");
     fireEvent.click(pickedOption);
+    
     await waitFor(() => {
       expect(mockUpdateStatus).toHaveBeenCalledWith(1, "picked");
     });

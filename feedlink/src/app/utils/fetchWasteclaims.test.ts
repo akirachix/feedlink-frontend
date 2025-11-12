@@ -131,8 +131,7 @@ describe("useFetchWasteclaims", () => {
 
     await expect(
       act(async () => {
-        // Instead of using "invalid_status" as any, we can use a valid status type
-        // but since we want to test error handling, we'll use a valid status that might fail on the backend
+
         await result.current.updateClaimStatus(1, "collected");
       })
     ).rejects.toThrow("Failed to update status: 400 - {\"message\":\"Bad Request\"}");

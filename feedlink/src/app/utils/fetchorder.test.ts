@@ -127,8 +127,6 @@ describe("useFetchOrders", () => {
 
     await expect(
       act(async () => {
-        // Instead of using "invalid_status" as any, we can use a valid status type
-        // but since we want to test error handling, we'll use a valid status that might fail on the backend
         await result.current.updateOrderStatus(1, "picked");
       })
     ).rejects.toThrow("Failed to update status: 400 - {\"message\":\"Bad Request\"}");

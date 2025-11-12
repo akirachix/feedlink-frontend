@@ -30,6 +30,7 @@ export async function PATCH(
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
+    console.error('Error in PATCH /api/orders/[id]:', error);
     return new Response('Internal server error', { status: 500 });
   }
 }
@@ -53,6 +54,7 @@ export async function GET(
 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
+    console.error('Error in GET /api/orders/[id]:', error);
     return new Response('Internal server error', { status: 500 });
   }
 }

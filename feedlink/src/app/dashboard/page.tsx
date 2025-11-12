@@ -1,6 +1,5 @@
 "use client";
 
-
 import Sidebar from "../shared-components/Sidebar";
 import MetricCard from "./components/Cards";
 import Chart from "./components/Impacts";
@@ -9,16 +8,15 @@ import { useOrders } from "../hooks/useFetchOrders";
 import { useWasteClaims } from "../hooks/useFetchClaims";
 import { useListings } from "../hooks/useFetchListings";
 
-
 export default function Dashboard() {
   const { orders, loading: ordersLoading } = useOrders();
   const { wasteClaims, loading: wasteClaimsLoading } = useWasteClaims();
   const { listings, loading: listingsLoading } = useListings();
   const loading = ordersLoading || wasteClaimsLoading || listingsLoading;
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden"> 
       <Sidebar />
-      <main className="flex-1 px-1 py-2 sm:px-2 sm:py-3 md:px-4 md:py-5 lg:px-8 lg:py-8 xl:px-10 xl:py-10 2xl:px-20 2xl:py-16 overflow-y-auto">
+      <main className="flex-1 h-full px-1 py-2 sm:px-2 sm:py-3 md:px-4 md:py-5 lg:px-8 lg:py-8 xl:px-10 xl:py-10 2xl:px-20 2xl:py-16 overflow-y-auto">
         <h1 className="text-base sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-[var(--primary-color)] mb-1 sm:mb-2">Dashboard Overview</h1>
         <p className="text-gray-600 mb-3 sm:mb-5 md:mb-6 lg:mb-8 text-xs sm:text-sm md:text-base xl:text-lg">Welcome Back !!!</p>
         {loading ? (
@@ -79,8 +77,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-
-
-
-

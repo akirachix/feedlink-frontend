@@ -10,13 +10,30 @@ export default function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
+  const canGoBack = currentPage > 1;
+  const canGoForward = currentPage < totalPages;
+
+  let startPage = Math.max(1, currentPage - 1); 
+  let endPage = Math.min(totalPages, startPage + 1); 
+
+  if (endPage - startPage < 1 && totalPages > 1) {
+
+     startPage = Math.max(1, totalPages - 1);
+     endPage = totalPages;
+  }
+
+  const pagesToShow = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pagesToShow.push(i);
+  }
+
   return (
     <div className="flex items-center justify-center gap-2 mt-6">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={!canGoBack}
         className={`p-2 rounded text-[var(--primary-color)] font-bold ${
-          currentPage === 1
+          !canGoBack
             ? "opacity-50 cursor-not-allowed"
             : "hover:bg-[#F0F5EB] hover:bg-opacity-50"
         }`}
@@ -25,7 +42,7 @@ export default function Pagination({
         <ChevronLeft size={30} strokeWidth={3.5} />
       </button>
 
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      {pagesToShow.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
@@ -34,6 +51,7 @@ export default function Pagination({
               ? "bg-[var(--primary-color)] text-white"
               : "border-[var(--primary-color)] text-gray-700 hover:bg-[#F0F5EB]"
           }`}
+          aria-current={page === currentPage ? 'page' : undefined}
         >
           {page}
         </button>
@@ -41,9 +59,9 @@ export default function Pagination({
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={!canGoForward}
         className={`p-2 rounded text-[var(--primary-color)] font-bold ${
-          currentPage === totalPages
+          !canGoForward
             ? "opacity-50 cursor-not-allowed"
             : "hover:bg-[#F0F5EB] hover:bg-opacity-50"
         }`}

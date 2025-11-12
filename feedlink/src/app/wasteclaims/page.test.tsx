@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { render, screen, fireEvent, within, waitFor } from "@testing-library/react";
 import WasteClaims from "./page";
 
 interface PaginationProps {
@@ -48,22 +48,31 @@ jest.mock("../shared-components/Sidebar", () => () => <div data-testid="sidebar"
 
 jest.mock("../component/Pagination", () => ({
   __esModule: true,
-  default: ({ currentPage, totalPages }: PaginationProps) => (
+  default: ({ currentPage, totalPages, onPageChange }: PaginationProps) => (
     <div
       data-testid="pagination"
       data-current-page={currentPage}
       data-total-pages={totalPages}
-    />
+    >
+      <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage <= 1}>
+        Previous
+      </button>
+      <span>Page {currentPage} of {totalPages}</span>
+      <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage >= totalPages}>
+        Next
+      </button>
+    </div>
   ),
 }));
 
 jest.mock("../component/Calendar", () => ({
   __esModule: true,
-  default: ({ selectedDate }: CalendarProps) => (
+  default: ({ selectedDate, setSelectedDate }: CalendarProps) => (
     <input
       data-testid="calendar"
+      type="date"
       value={selectedDate ? selectedDate.toISOString().split("T")[0] : ""}
-      readOnly
+      onChange={(e) => setSelectedDate(e.target.value ? new Date(e.target.value) : null)}
     />
   ),
 }));
@@ -77,6 +86,7 @@ beforeEach(() => {
         listing_id: 201,
         claim_time: "2025-09-21T10:00:00Z",
         claim_status: "pending",
+        pin: "12345"
       },
       {
         waste_id: 2,
@@ -84,6 +94,7 @@ beforeEach(() => {
         listing_id: 202,
         claim_time: "2025-09-22T15:30:00Z",
         claim_status: "collected",
+        pin: "67890"
       },
       {
         waste_id: 3,
@@ -91,10 +102,12 @@ beforeEach(() => {
         listing_id: 201,
         claim_time: "2025-09-21T10:00:00Z",
         claim_status: "collected",
+        pin: "54321"
       },
     ],
     loading: false,
     error: null,
+    updateClaimStatus: jest.fn(),
   }));
 });
 
@@ -127,6 +140,7 @@ describe("WasteClaims page", () => {
       wasteClaims: [],
       loading: true,
       error: null,
+      updateClaimStatus: jest.fn(),
     }));
     render(<WasteClaims />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
@@ -137,6 +151,7 @@ describe("WasteClaims page", () => {
       wasteClaims: [],
       loading: false,
       error: "Something went wrong",
+      updateClaimStatus: jest.fn(),
     }));
     render(<WasteClaims />);
     expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
@@ -147,6 +162,7 @@ describe("WasteClaims page", () => {
       wasteClaims: [],
       loading: false,
       error: null,
+      updateClaimStatus: jest.fn(),
     }));
     render(<WasteClaims />);
     expect(screen.getByText(/no waste claims found/i)).toBeInTheDocument();
@@ -170,10 +186,35 @@ describe("WasteClaims page", () => {
     expect(screen.queryByText("Kisanet Sshay")).not.toBeInTheDocument();
   });
 
-  test("pagination updates currentPage", () => {
+  test("filters by date", () => {
     render(<WasteClaims />);
-    fireEvent.click(screen.getByTestId("pagination"));
-    expect(screen.getByTestId("pagination")).toHaveAttribute("data-current-page", "1");
+    const calendar = screen.getByTestId("calendar");
+    fireEvent.change(calendar, { target: { value: "2025-09-22" } });
+    
+    expect(screen.getByText("Pauline Mwihaki")).toBeInTheDocument();
+    expect(screen.queryByText("Semhal Estifanos")).not.toBeInTheDocument();
+    expect(screen.queryByText("Kisanet Sshay")).not.toBeInTheDocument();
+  });
+
+  test("pagination updates currentPage", async () => {
+    mockWasteclaimsHook.default.mockImplementationOnce(() => ({
+      wasteClaims: Array.from({ length: 10 }, (_, i) => ({
+        waste_id: i + 1,
+        user: 101,
+        listing_id: 201,
+        claim_time: `2025-09-21T${10 + i}:00:00Z`,
+        claim_status: i % 2 === 0 ? "pending" : "collected",
+        pin: `${1000 + i}`
+      })),
+      loading: false,
+      error: null,
+      updateClaimStatus: jest.fn(),
+    }));
+    
+    render(<WasteClaims />);
+    
+    fireEvent.click(screen.getByText("Next"));
+    expect(screen.getByTestId("pagination")).toHaveAttribute("data-current-page", "2");
   });
 
   test("handles unknown listing quantity gracefully", () => {
@@ -185,10 +226,12 @@ describe("WasteClaims page", () => {
           listing_id: 999,
           claim_time: "2025-09-21T10:00:00Z",
           claim_status: "pending",
+          pin: "11111"
         },
       ],
       loading: false,
       error: null,
+      updateClaimStatus: jest.fn(),
     }));
     render(<WasteClaims />);
     expect(screen.getByText(/Unknown Kgs/i)).toBeInTheDocument();
@@ -203,15 +246,68 @@ describe("WasteClaims page", () => {
           listing_id: 201,
           claim_time: "2025-09-21T10:00:00Z",
           claim_status: "pending",
+          pin: "22222"
         },
       ],
       loading: false,
       error: null,
+      updateClaimStatus: jest.fn(),
     }));
     render(<WasteClaims />);
     const table = screen.getByRole("table");
     const rows = within(table).getAllByRole("row").slice(1);
     const recyclerCell = rows[0].querySelector("td");
     expect(recyclerCell?.textContent?.trim()).toBe("");
+  });
+
+  test("handles missing pin gracefully", () => {
+    mockWasteclaimsHook.default.mockImplementationOnce(() => ({
+      wasteClaims: [
+        {
+          waste_id: 6,
+          user: 101,
+          listing_id: 201,
+          claim_time: "2025-09-21T10:00:00Z",
+          claim_status: "pending",
+          pin: null
+        },
+      ],
+      loading: false,
+      error: null,
+      updateClaimStatus: jest.fn(),
+    }));
+    render(<WasteClaims />);
+    expect(screen.getByText("N/A")).toBeInTheDocument();
+  });
+
+  test("updates status when dropdown option is selected", async () => {
+    const mockUpdateStatus = jest.fn();
+    mockWasteclaimsHook.default.mockImplementationOnce(() => ({
+      wasteClaims: [
+        {
+          waste_id: 1,
+          user: 101,
+          listing_id: 201,
+          claim_time: "2025-09-21T10:00:00Z",
+          claim_status: "pending",
+          pin: "12345"
+        }
+      ],
+      loading: false,
+      error: null,
+      updateClaimStatus: mockUpdateStatus,
+    }));
+
+    render(<WasteClaims />);
+    
+    const statusSelect = screen.getByText("Pending");
+    fireEvent.click(statusSelect);
+    
+    const collectedOption = screen.getByText("Collected");
+    fireEvent.click(collectedOption);
+    
+    await waitFor(() => {
+      expect(mockUpdateStatus).toHaveBeenCalledWith(1, "collected");
+    });
   });
 });

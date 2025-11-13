@@ -28,16 +28,19 @@ describe("Pagination Component", () => {
 
   test("renders correct number of page buttons", () => {
     render(<Pagination currentPage={2} totalPages={5} onPageChange={onPageChange} />);
-    expect(screen.getAllByRole("button")).toHaveLength(7);
+    expect(screen.getAllByRole("button")).toHaveLength(4); 
     expect(screen.getByText("2")).toHaveClass("bg-[var(--primary-color)]");
   });
 
-  test("calls onPageChange with correct page number when page button is clicked", () => {
+  test("calls onPageChange with correct page number and on navigation button clicks", () => {
     render(<Pagination currentPage={2} totalPages={5} onPageChange={onPageChange} />);
-    fireEvent.click(screen.getByText("3"));
+    fireEvent.click(screen.getByText("1"));
+    expect(onPageChange).toHaveBeenCalledWith(1);
+
+    fireEvent.click(screen.getByLabelText("Next page"));
     expect(onPageChange).toHaveBeenCalledWith(3);
 
-    fireEvent.click(screen.getByText("1"));
+    fireEvent.click(screen.getByLabelText("Previous page"));
     expect(onPageChange).toHaveBeenCalledWith(1);
   });
 

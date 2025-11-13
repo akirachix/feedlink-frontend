@@ -4,12 +4,12 @@ import InventorySummary from './components/InventorySummary';
 import InventoryFilters from './components/InventoryFilters';
 import InventoryTable from './components/InventoryTable';
 import InventoryModals from './components/InventoryModals';
-import InventoryPagination from './components/InventoryPagination';
 import useInventory from '../hooks/useFetchInventory';
 import useModal from '../hooks/useFetchModal';
 import { Listing } from '../utils/types';
 import Sidebar from '../shared-components/Sidebar';
 import { isExpired, isExpiringSoon } from '../utils/utils';
+import Pagination from '../component/Pagination';
 
 const baseUrl = "/api/listings/";
 
@@ -22,7 +22,7 @@ const InventoryPage = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [uploadDateFilter, setUploadDateFilter] = useState("");
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 8; 
 
   const [selectedItem, setSelectedItem] = useState<Listing | null>(null);
   const [editLoading, setEditLoading] = useState(false);
@@ -142,7 +142,7 @@ const InventoryPage = () => {
         upload_method: selectedItem.upload_method,
         pickup_window_duration: pickupWindowISO,
         unit: selectedItem.unit,
-        image_url: selectedItem.image_url || "https://via.placeholder.com/150",
+        image_url: selectedItem.image_url || "https://via.placeholder.com/150    ",
         producer: selectedItem.producer || null,
       };
 
@@ -242,10 +242,10 @@ const InventoryPage = () => {
   }, [categoryFilter, statusFilter, searchTerm, uploadDateFilter]);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-100 overflow-hidden"> 
       <Sidebar />
 
-      <div className="flex-1 overflow-y-auto p-2">
+      <main className="flex-1 h-full p-6 overflow-auto"> 
         <div className="font-nunito max-w-7xl mx-auto">
           <div
             className={modalOpen ? "pointer-events-none select-none" : ""}
@@ -282,7 +282,6 @@ const InventoryPage = () => {
               onUploadClick={handleUploadClick}
             />
 
-            {}
             {successMessage && (
               <div className="mb-6 p-4 bg-green-100 text-green-800 border border-green-300 rounded-lg shadow-md flex items-center justify-between animate-fade-in">
                 <span className="font-medium">{successMessage}</span>
@@ -302,7 +301,11 @@ const InventoryPage = () => {
               openDetailModal={openDetailModal}
             />
 
-            <InventoryPagination page={page} pageCount={pageCount} setPage={setPage} />
+            <Pagination
+              currentPage={page}
+              totalPages={pageCount}
+              onPageChange={setPage} 
+            />
           </div>
 
           {modalOpen && (
@@ -334,7 +337,7 @@ const InventoryPage = () => {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

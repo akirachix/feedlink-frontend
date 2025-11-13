@@ -8,10 +8,14 @@ export interface OrderItemType {
 export interface OrderType {
   order_id: number;
   user: number;
+  items: OrderItemType[];
   total_amount: string;
   order_date: string;
   order_status: "pending" | "picked";
-  items: OrderItemType[]; 
+  payment_status: string;
+  pin: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface UserType {
@@ -28,6 +32,7 @@ export interface ListingType {
 
 export interface WasteClaimType {
   waste_id: number;
+  pin: string;
   user: number;
   listing_id: number;
   claim_time: string;

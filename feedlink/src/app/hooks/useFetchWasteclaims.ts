@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchWasteclaims } from "../utils/fetchWasteclaims";
+import { fetchWasteclaims, updateWasteClaimStatus } from "../utils/fetchWasteclaims"; 
 import { WasteClaimType } from "../utils/type";
 
 const useFetchWasteclaims = () => {
@@ -20,7 +20,24 @@ const useFetchWasteclaims = () => {
     })();
   }, []);
 
-  return { wasteClaims, loading, error };
+  const updateClaimStatus = async (wasteId: number, newStatus: "pending" | "collected") => {
+    try {
+      const response = await updateWasteClaimStatus(wasteId, newStatus);
+      setWasteClaims(prevClaims => 
+        prevClaims.map(claim => 
+          claim.waste_id === wasteId 
+            ? { ...claim, claim_status: newStatus, claim_time: response.claim_time || claim.claim_time } 
+            : claim
+        )
+      );
+      return response;
+    } catch (err) {
+      setError((err as Error).message);
+      throw err; 
+    }
+  };
+
+  return { wasteClaims, loading, error, updateClaimStatus };
 };
 
 export default useFetchWasteclaims;
